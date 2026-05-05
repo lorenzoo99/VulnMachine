@@ -1,38 +1,51 @@
 {% extends "base.html" %}
 {% block title %}C5 – Search SQLi | VulnMachine{% endblock %}
 {% block content %}
-<div style="flex-direction:column;align-items:flex-start;" class="flex gap-2 mb-2">
-  <a href="/" class="btn btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.8rem;">← Volver</a>
-  <h1>CHALLENGE 05</h1>
-  <h2>SQL Injection en Búsqueda (LIKE)</h2>
+
+<div class="flex gap-2 mb-2" style="flex-direction:column; align-items:flex-start;">
+  <a href="/" class="btn btn-ghost" style="font-size:0.72rem; padding:0.3rem 0.8rem;">← /home</a>
+  <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase;">challenge_05.sh</div>
+  <h1>SEARCH SQLi</h1>
+  <h2>SQL Injection en buscador — cláusula LIKE y parámetro LIMIT</h2>
 </div>
+
 <div class="card mb-2">
-  <p style="line-height:1.8;color:var(--muted);font-family:var(--font-mono);font-size:0.85rem;">
+  <p style="font-size:0.82rem; color:var(--text); line-height:1.85; font-family:var(--font-mono);">
     El buscador de productos usa LIKE con la entrada del usuario sin sanitizar.<br>
-    <strong style="color:var(--accent3)">Nivel 1</strong>: El campo de búsqueda es directamente inyectable.<br>
-    <strong style="color:var(--warn)">Nivel 2</strong>: El search está sanitizado PERO el parámetro LIMIT no.
+    <span style="color:var(--green-dim);">[LVL 1]</span> El campo de búsqueda es directamente inyectable.<br>
+    <span style="color:var(--warn);">[LVL 2]</span> El search está sanitizado, pero el parámetro <code style="color:var(--green); background:rgba(0,255,65,0.08); padding:1px 4px; border:1px solid var(--green-dark);">?limit=</code> no lo está.
   </p>
 </div>
+
 <div class="grid-2">
-  <div class="card" style="border-color:rgba(57,255,20,0.4);text-align:center;">
-    <div style="font-family:var(--font-head);font-size:3rem;color:var(--accent3);margin-bottom:0.5rem;">1</div>
-    <span class="badge badge-easy">LIKE CLAUSE</span>
-    <p style="font-size:0.82rem;color:var(--muted);margin:1rem 0;">Inyección directa en LIKE. Payload: <code>%' UNION SELECT...</code></p>
-    <a href="/challenge/5/level1" class="btn btn-primary" style="background:var(--accent3);color:#000;">ACCEDER</a>
+  <div class="card" style="border-color:var(--green-dark); text-align:center;">
+    <div style="font-family:var(--font-vt); font-size:3.5rem; color:var(--green); text-shadow:var(--glow); margin-bottom:0.4rem; line-height:1;">1</div>
+    <div style="font-size:0.85rem; letter-spacing:1px; margin-bottom:0.5rem; color:var(--text);">LIKE Clause</div>
+    <span class="badge badge-easy">SIN FILTRO</span>
+    <p style="font-size:0.78rem; color:var(--text); margin:1rem 0; line-height:1.7; font-family:var(--font-mono);">
+      Inyección directa en LIKE.<br>Payload: <code style="color:var(--green); background:rgba(0,255,65,0.08); padding:1px 4px; border:1px solid var(--green-dark);">%' UNION SELECT...</code>
+    </p>
+    <a href="/challenge/5/level1" class="btn btn-primary" style="width:100%; text-align:center;">&gt; acceder</a>
   </div>
-  <div class="card" style="border-color:rgba(255,170,0,0.4);text-align:center;">
-    <div style="font-family:var(--font-head);font-size:3rem;color:var(--warn);margin-bottom:0.5rem;">2</div>
-    <span class="badge badge-medium">LIMIT PARAM</span>
-    <p style="font-size:0.82rem;color:var(--muted);margin:1rem 0;">El search está protegido. El parámetro <code>?limit=</code> no lo está.</p>
-    <a href="/challenge/5/level2" class="btn btn-primary" style="background:var(--warn);color:#000;">ACCEDER</a>
+
+  <div class="card" style="border-color:rgba(255,179,0,0.25); text-align:center;">
+    <div style="font-family:var(--font-vt); font-size:3.5rem; color:var(--warn); margin-bottom:0.4rem; line-height:1;">2</div>
+    <div style="font-size:0.85rem; letter-spacing:1px; margin-bottom:0.5rem; color:var(--text);">LIMIT Param</div>
+    <span class="badge badge-medium">PARÁMETRO OLVIDADO</span>
+    <p style="font-size:0.78rem; color:var(--text); margin:1rem 0; line-height:1.7; font-family:var(--font-mono);">
+      El search está protegido.<br>El parámetro <code style="color:var(--green); background:rgba(0,255,65,0.08); padding:1px 4px; border:1px solid var(--green-dark);">?limit=</code> no lo está.
+    </p>
+    <a href="/challenge/5/level2" class="btn btn-primary" style="width:100%; text-align:center; border-color:var(--warn); color:var(--warn);">&gt; acceder</a>
   </div>
 </div>
+
 <div class="hint-box mt-3">
-  <div class="hint-title">💡 Técnica: LIKE injection</div>
+  <div class="hint-title">técnica: LIKE injection</div>
   <p>
-    La query es: <code>SELECT ... FROM products WHERE name LIKE '%[search]%'</code><br>
-    Cierra el LIKE con: <code>%' UNION SELECT 1,secret_flag,3,4 FROM products-- </code><br>
-    Para nivel 2, el LIMIT permite: <code>?limit=5 UNION SELECT 1,flag,3 FROM secret_flags-- </code>
+    Query: <code>SELECT ... FROM products WHERE name LIKE '%[search]%'</code><br>
+    Cierra el LIKE con: <code>%' UNION SELECT 1,secret_flag,description,price FROM products WHERE id=9--</code><br>
+    Para nivel 2: <code>?limit=5 UNION SELECT 1,secret_flag,description,price FROM products WHERE id=10--</code>
   </p>
 </div>
+
 {% endblock %}

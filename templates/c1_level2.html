@@ -3,9 +3,9 @@
 {% block content %}
 
 <div class="flex gap-2 mb-2" style="flex-direction:column; align-items:flex-start;">
-  <a href="/challenge/1" class="btn btn-ghost" style="font-size:0.75rem; padding:0.3rem 0.8rem;">← C1 Overview</a>
+  <a href="/challenge/1" class="btn btn-ghost" style="font-size:0.72rem; padding:0.3rem 0.8rem;">← C1 Overview</a>
   <div class="flex gap-2">
-    <h1 style="font-size:1.2rem;">C1</h1>
+    <h1 style="font-size:1.4rem;">C1</h1>
     <span class="badge badge-medium" style="align-self:center;">NIVEL 2 – WAF BÁSICO</span>
   </div>
   <h2>Login Bypass – WAF Bypass</h2>
@@ -17,7 +17,7 @@
 </div>
 
 <div class="alert alert-warn">
-  ⚠️ WAF activo: Las palabras <strong>or, union, select, drop</strong> (en minúsculas) están bloqueadas.
+  WAF activo: Las palabras <strong>or, union, select, drop</strong> (en minúsculas) están bloqueadas.
 </div>
 
 <div class="grid-2" style="align-items:start;">
@@ -46,20 +46,20 @@
 
       {% if flag %}
       <div class="flag-box mt-2">
-        <div class="flag-label">🚩 FLAG CAPTURADA</div>
+        <div class="flag-label">FLAG CAPTURADA</div>
         <div class="flag-value">{{ flag }}</div>
       </div>
       {% endif %}
 
       {% if result %}
-      <div class="alert alert-success mt-2">✅ WAF Bypasseado — Acceso concedido</div>
+      <div class="alert alert-success mt-2">WAF bypasseado — acceso concedido</div>
       {% endif %}
     </div>
 
     <div class="hint-box mt-2">
-      <div class="hint-title">💡 Pista</div>
+      <div class="hint-title">pista</div>
       <p>
-        El WAF solo bloquea palabras en <strong style="color:var(--accent2)">minúsculas</strong>.<br><br>
+        El WAF solo bloquea palabras en <span style="color:var(--danger);">minúsculas</span>.<br><br>
         ¿Qué pasa si usas <code>OR</code>, <code>Or</code> o <code>oR</code>?<br>
         Prueba: <code>admin'-- -</code> o <code>' OR 1=1-- -</code><br>
         También: <code>' oR '1'='1</code>
@@ -67,26 +67,26 @@
     </div>
   </div>
 
-  <div class="card" style="font-family:var(--font-mono); font-size:0.8rem;">
-    <div style="color:var(--muted); font-size:0.7rem; letter-spacing:2px; margin-bottom:1rem; text-transform:uppercase;">WAF Implementation (simulado)</div>
-    <pre style="background:#040c15; padding:1rem; border-radius:3px; overflow:auto; color:var(--text); line-height:1.7; border:1px solid var(--border);">
+  <div class="card" style="font-size:0.8rem;">
+    <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase; margin-bottom:0.8rem;">WAF implementation (simulado)</div>
+    <pre style="background:#000; padding:1rem; overflow:auto; color:var(--text); line-height:1.8; border:1px solid var(--border); font-family:var(--font-mono); font-size:0.78rem;">
 <span style="color:var(--muted)"># Palabras bloqueadas</span>
-blocked = [<span style="color:#f1c40f;">"or"</span>, <span style="color:#f1c40f;">"union"</span>,
-           <span style="color:#f1c40f;">"select"</span>, <span style="color:#f1c40f;">"drop"</span>]
+blocked = [<span style="color:var(--green)">"or"</span>, <span style="color:var(--green)">"union"</span>,
+           <span style="color:var(--green)">"select"</span>, <span style="color:var(--green)">"drop"</span>]
 
-<span style="color:#7fdbca;">user_lower</span> = user.<span style="color:#e8b90f;">lower()</span>
+<span style="color:var(--green-dim)">user_lower</span> = user.lower()
 
-<span style="color:#c084fc;">if</span> <span style="color:#e8b90f;">any</span>(b <span style="color:#c084fc;">in</span> user_lower
-       <span style="color:#c084fc;">for</span> b <span style="color:#c084fc;">in</span> blocked):
-    <span style="color:var(--accent2)"># BLOQUEADO</span>
-<span style="color:#c084fc;">else</span>:
-    <span style="color:var(--muted)"># ⚠️ Aún vulnerable</span>
-    query = <span style="color:#f1c40f;">f"SELECT * FROM users
-  WHERE username=<span style="color:var(--accent2)">'{user}'</span>
-  AND password=<span style="color:var(--accent2)">'{pwd}'"</span></span>
+<span style="color:var(--green-dim)">if</span> any(b <span style="color:var(--green-dim)">in</span> user_lower
+       <span style="color:var(--green-dim)">for</span> b <span style="color:var(--green-dim)">in</span> blocked):
+    <span style="color:var(--muted)"># BLOQUEADO</span>
+<span style="color:var(--green-dim)">else</span>:
+    <span style="color:var(--muted)"># ⚠ Aún vulnerable</span>
+    query = <span style="color:var(--green)">f"SELECT * FROM users
+  WHERE username=<span style="color:var(--danger)">'{user}'</span>
+  AND password=<span style="color:var(--danger)">'{pwd}'"</span></span>
     </pre>
-    <p style="color:var(--warn); font-size:0.78rem; margin-top:0.8rem;">
-      🔍 El WAF compara contra <code>user.lower()</code>, pero ejecuta el <code>user</code> original.
+    <p style="color:var(--warn); font-size:0.75rem; margin-top:0.8rem;">
+      El WAF compara contra <code>user.lower()</code> pero ejecuta el <code>user</code> original sin modificar.
     </p>
   </div>
 </div>
