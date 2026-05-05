@@ -35,12 +35,4 @@
   </table>
 </div>
 {% endif %}
-<div class="hint-box mt-2">
-  <div class="hint-title">💡 Pista</div>
-  <p>
-    <code>isdigit()</code> falla con espacios o caracteres especiales al inicio.<br>
-    Prueba enviar <code>1 UNION SELECT 1,secret_flag,3,4,5,6 FROM products--</code><br>
-    El espacio hace que isdigit() retorne False, pero el código igual ejecuta la query.
-  </p>
-</div>
 {% endblock %}

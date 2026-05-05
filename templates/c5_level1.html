@@ -32,12 +32,4 @@
   </table>
 </div>
 {% endif %}
-<div class="hint-box mt-2">
-  <div class="hint-title">💡 Pista</div>
-  <p>
-    Query: <code>SELECT id,name,description,price FROM products WHERE name LIKE '%[search]%'</code><br>
-    Payload: <code>%' UNION SELECT 1,secret_flag,description,price FROM products-- </code><br>
-    O tablas: <code>%' UNION SELECT 1,name,sql,4 FROM sqlite_master-- </code>
-  </p>
-</div>
 {% endblock %}

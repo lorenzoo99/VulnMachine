@@ -37,13 +37,4 @@
   </table>
 </div>
 {% endif %}
-<div class="hint-box mt-2">
-  <div class="hint-title">💡 Pista</div>
-  <p>
-    Query: <code>SELECT id, [col], category, price FROM products ORDER BY [safe_sort]</code><br>
-    El parámetro <code>col</code> no está sanitizado. Prueba:<br>
-    <code>?col=(SELECT secret FROM users WHERE id=1)</code><br>
-    <code>?col=(SELECT secret_flag FROM products WHERE id=12)</code>
-  </p>
-</div>
 {% endblock %}

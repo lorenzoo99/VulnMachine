@@ -37,12 +37,4 @@
   </table>
 </div>
 {% endif %}
-<div class="hint-box mt-2">
-  <div class="hint-title">💡 Pista</div>
-  <p>
-    Query: <code>SELECT id,name,category,price FROM products ORDER BY [sort]</code><br>
-    Usa CASE WHEN: <code>?sort=(SELECT secret_flag FROM products WHERE id=3)</code><br>
-    O extrae usuarios: <code>?sort=(SELECT secret FROM users LIMIT 1)</code>
-  </p>
-</div>
 {% endblock %}

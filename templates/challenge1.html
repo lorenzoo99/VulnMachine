@@ -40,13 +40,5 @@
   </div>
 </div>
 
-<div class="hint-box mt-3">
-  <div class="hint-title">conceptos clave</div>
-  <p>
-    Query vulnerable: <code>SELECT * FROM users WHERE username='[INPUT]' AND password='[INPUT]'</code><br><br>
-    Inyectando <code>' OR '1'='1' --</code> en usuario, la condición siempre es TRUE y el login se bypasea.<br>
-    Para el nivel 2, recuerda que el filtro es case-sensitive: <code>OR</code> ≠ <code>or</code>.
-  </p>
-</div>
 
 {% endblock %}
