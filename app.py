@@ -1,7 +1,8 @@
-from flask import Flask, request, render_template, redirect, url_for, session, g
+from flask import Flask, request, render_template, redirect, url_for, session, g, Markup
 import sqlite3
 import os
 import hashlib
+import re
 
 app = Flask(__name__)
 app.secret_key = 'vuln_machine_secret'
@@ -372,6 +373,79 @@ def c6_level2():
 # ─────────────────────────────────────────────
 # Scoreboard
 # ─────────────────────────────────────────────
+# ═══════════════════════════════════════════════════════════════
+# CHALLENGE 7 – Stored XSS / BeEF Hook
+#   FLAG_7A (Nivel 1 – sin filtro, XSS directo)
+#   FLAG_7B (Nivel 2 – filtro <script> bypasseable con otros vectores)
+# ═══════════════════════════════════════════════════════════════
+
+@app.route('/challenge/7')
+def challenge7():
+    return render_template('challenge7.html')
+
+@app.route('/challenge/7/level1', methods=['GET', 'POST'])
+def c7_level1():
+    error = flag = None
+    if request.method == 'POST':
+        action  = request.form.get('action', '')
+        author  = request.form.get('author', 'Anónimo')[:50]
+        content = request.form.get('content', '')
+        db = sqlite3.connect(DATABASE)
+        if action == 'clear':
+            db.execute("DELETE FROM comments WHERE level=1")
+            db.commit()
+        elif content:
+            db.execute("INSERT INTO comments (level, author, content) VALUES (1,?,?)", (author, content))
+            db.commit()
+        db.close()
+
+    db = sqlite3.connect(DATABASE)
+    rows = db.execute("SELECT author, content, timestamp FROM comments WHERE level=1 ORDER BY id").fetchall()
+    db.close()
+
+    comments = [(r[0], Markup(r[1]), r[2]) for r in rows]
+
+    for _, content, _ in comments:
+        if '<' in str(content):
+            flag = "FLAG{7A_st0red_xss_b33f_h00k}"
+            break
+
+    return render_template('c7_level1.html', comments=comments, error=error, flag=flag)
+
+@app.route('/challenge/7/level2', methods=['GET', 'POST'])
+def c7_level2():
+    error = flag = None
+    if request.method == 'POST':
+        action  = request.form.get('action', '')
+        author  = request.form.get('author', 'Anónimo')[:50]
+        content = request.form.get('content', '')
+        db = sqlite3.connect(DATABASE)
+        if action == 'clear':
+            db.execute("DELETE FROM comments WHERE level=2")
+            db.commit()
+        elif content:
+            if re.search(r'<script', content, re.IGNORECASE):
+                error = "WAF: tag <script> detectado y bloqueado."
+            else:
+                db.execute("INSERT INTO comments (level, author, content) VALUES (2,?,?)", (author, content))
+                db.commit()
+        db.close()
+
+    db = sqlite3.connect(DATABASE)
+    rows = db.execute("SELECT author, content, timestamp FROM comments WHERE level=2 ORDER BY id").fetchall()
+    db.close()
+
+    comments = [(r[0], Markup(r[1]), r[2]) for r in rows]
+
+    bypass_vectors = ['onerror', 'onload', 'onclick', 'onmouseover', '<svg', '<img', '<iframe', 'javascript:']
+    for _, content, _ in comments:
+        lower = str(content).lower()
+        if any(v in lower for v in bypass_vectors):
+            flag = "FLAG{7B_xss_f1lt3r_byp4ss_b33f}"
+            break
+
+    return render_template('c7_level2.html', comments=comments, error=error, flag=flag)
+
 @app.route('/scoreboard')
 def scoreboard():
     flags = {
@@ -387,6 +461,8 @@ def scoreboard():
         "FLAG{5B_l1m1t_param_sqli_bypass}":       "C5 Nivel 2 – LIMIT Param Bypass",
         "FLAG{6A_0rder_by_sqli_c4se_when}":       "C6 Nivel 1 – ORDER BY CASE/WHEN",
         "FLAG{6B_c0l_subquery_m4ster}": "C6 Nivel 2 – Column Subquery Inject",
+        "FLAG{7A_st0red_xss_b33f_h00k}":   "C7 Nivel 1 – Stored XSS / BeEF Hook",
+        "FLAG{7B_xss_f1lt3r_byp4ss_b33f}": "C7 Nivel 2 – XSS Filter Bypass BeEF",
     }
     return render_template('scoreboard.html', flags=flags)
 

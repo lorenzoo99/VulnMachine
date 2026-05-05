@@ -79,7 +79,27 @@ secrets = [
 ]
 cur.executemany("INSERT INTO secret_flags VALUES (?,?,?)", secrets)
 
+# ── Tabla de comentarios (Challenge 7 – Stored XSS) ───
+cur.execute("DROP TABLE IF EXISTS comments")
+cur.execute("""
+CREATE TABLE comments (
+    id        INTEGER PRIMARY KEY AUTOINCREMENT,
+    level     INTEGER NOT NULL,
+    author    TEXT NOT NULL,
+    content   TEXT NOT NULL,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+)
+""")
+
+comments_seed = [
+    (1, 'admin',  'Bienvenidos al foro de VulnMachine. Comparte tus dudas aquí.'),
+    (1, 'juan',   'Excelente plataforma para practicar seguridad ofensiva.'),
+    (2, 'admin',  'Este foro tiene filtros de seguridad mejorados. ¡Sin scripts!'),
+    (2, 'maria',  'Muy útil para aprender sobre XSS y sus variantes.'),
+]
+cur.executemany("INSERT INTO comments (level, author, content) VALUES (?,?,?)", comments_seed)
+
 conn.commit()
 conn.close()
 print("✅ Base de datos 'vulnerable.db' creada correctamente.")
-print("   Tablas: users, products, secret_flags")
+print("   Tablas: users, products, secret_flags, comments")
