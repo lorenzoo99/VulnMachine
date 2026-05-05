@@ -1,4 +1,5 @@
-from flask import Flask, request, render_template, redirect, url_for, session, g, Markup
+from flask import Flask, request, render_template, redirect, url_for, session, g
+from markupsafe import Markup
 import sqlite3
 import os
 import hashlib
