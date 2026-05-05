@@ -1,38 +1,51 @@
 {% extends "base.html" %}
 {% block title %}C3 – UNION-Based SQLi | VulnMachine{% endblock %}
 {% block content %}
-<div style="flex-direction:column;align-items:flex-start;" class="flex gap-2 mb-2">
-  <a href="/" class="btn btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.8rem;">← Volver</a>
-  <h1>CHALLENGE 03</h1>
-  <h2>UNION-Based SQL Injection</h2>
+
+<div class="flex gap-2 mb-2" style="flex-direction:column; align-items:flex-start;">
+  <a href="/" class="btn btn-ghost" style="font-size:0.72rem; padding:0.3rem 0.8rem;">← /home</a>
+  <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase;">challenge_03.sh</div>
+  <h1>UNION-BASED</h1>
+  <h2>SQL Injection por UNION SELECT en filtro de categoría</h2>
 </div>
+
 <div class="card mb-2">
-  <p style="line-height:1.8;color:var(--muted);font-family:var(--font-mono);font-size:0.85rem;">
-    El filtro de categoría en el catálogo es vulnerable. Usa UNION SELECT para extraer datos de tablas ocultas.<br>
-    <strong style="color:var(--accent3)">Nivel 1</strong>: Sin protección — UNION directo funciona.<br>
-    <strong style="color:var(--warn)">Nivel 2</strong>: Se escapan las comillas simples (<code>replace("'","''")</code>), pero hay otras formas.
+  <p style="font-size:0.82rem; color:var(--text); line-height:1.85; font-family:var(--font-mono);">
+    El filtro de categoría del catálogo es vulnerable. Usa UNION SELECT para extraer datos de tablas ocultas.<br>
+    <span style="color:var(--green-dim);">[LVL 1]</span> Sin protección — UNION directo funciona.<br>
+    <span style="color:var(--warn);">[LVL 2]</span> Se escapan las comillas simples con <code style="color:var(--green); background:rgba(0,255,65,0.08); padding:1px 4px; border:1px solid var(--green-dark);">replace("'","''")</code>, pero hay otras formas.
   </p>
 </div>
+
 <div class="grid-2">
-  <div class="card" style="border-color:rgba(57,255,20,0.4);text-align:center;">
-    <div style="font-family:var(--font-head);font-size:3rem;color:var(--accent3);margin-bottom:0.5rem;">1</div>
-    <span class="badge badge-easy">UNION DIRECTO</span>
-    <p style="font-size:0.82rem;color:var(--muted);margin:1rem 0;">Inyección directa en el parámetro de categoría. 3 columnas en el SELECT.</p>
-    <a href="/challenge/3/level1?q=Electronica" class="btn btn-primary" style="background:var(--accent3);color:#000;">ACCEDER</a>
+  <div class="card" style="border-color:var(--green-dark); text-align:center;">
+    <div style="font-family:var(--font-vt); font-size:3.5rem; color:var(--green); text-shadow:var(--glow); margin-bottom:0.4rem; line-height:1;">1</div>
+    <div style="font-size:0.85rem; letter-spacing:1px; margin-bottom:0.5rem; color:var(--text);">UNION Directo</div>
+    <span class="badge badge-easy">SIN FILTRO</span>
+    <p style="font-size:0.78rem; color:var(--text); margin:1rem 0; line-height:1.7; font-family:var(--font-mono);">
+      Inyección directa en el parámetro de categoría.<br>3 columnas en el SELECT original.
+    </p>
+    <a href="/challenge/3/level1?q=Electronica" class="btn btn-primary" style="width:100%; text-align:center;">&gt; acceder</a>
   </div>
-  <div class="card" style="border-color:rgba(255,170,0,0.4);text-align:center;">
-    <div style="font-family:var(--font-head);font-size:3rem;color:var(--warn);margin-bottom:0.5rem;">2</div>
-    <span class="badge badge-medium">QUOTE ESCAPE</span>
-    <p style="font-size:0.82rem;color:var(--muted);margin:1rem 0;">Las comillas simples se doblan. Usa encoding alternativo o inyección sin comillas.</p>
-    <a href="/challenge/3/level2?q=Electronica" class="btn btn-primary" style="background:var(--warn);color:#000;">ACCEDER</a>
+
+  <div class="card" style="border-color:rgba(255,179,0,0.25); text-align:center;">
+    <div style="font-family:var(--font-vt); font-size:3.5rem; color:var(--warn); margin-bottom:0.4rem; line-height:1;">2</div>
+    <div style="font-size:0.85rem; letter-spacing:1px; margin-bottom:0.5rem; color:var(--text);">Quote Escape</div>
+    <span class="badge badge-medium">COMILLAS ESCAPADAS</span>
+    <p style="font-size:0.78rem; color:var(--text); margin:1rem 0; line-height:1.7; font-family:var(--font-mono);">
+      Las comillas simples se doblan. Usa encoding alternativo o inyección sin comillas.
+    </p>
+    <a href="/challenge/3/level2?q=Electronica" class="btn btn-primary" style="width:100%; text-align:center; border-color:var(--warn); color:var(--warn);">&gt; acceder</a>
   </div>
 </div>
+
 <div class="hint-box mt-3">
-  <div class="hint-title">💡 Técnica: UNION con número correcto de columnas</div>
+  <div class="hint-title">técnica: UNION con número correcto de columnas</div>
   <p>
     El SELECT original tiene 3 columnas: id, name, category.<br>
-    Payload: <code>?q=x' UNION SELECT 1,flag,3 FROM secret_flags--</code><br>
-    Para nivel 2 con comillas escapadas, prueba inyecciones sin comillas o usa <code>CHAR()</code>.
+    Payload: <code>?q=x' UNION SELECT 1,flag,name FROM secret_flags--</code><br>
+    Para nivel 2 con comillas escapadas, prueba inyecciones sin comillas o usa <code>CHAR()</code> para codificar strings.
   </p>
 </div>
+
 {% endblock %}

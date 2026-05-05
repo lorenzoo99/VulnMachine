@@ -1,41 +1,58 @@
 {% extends "base.html" %}
 {% block title %}Scoreboard – VulnMachine{% endblock %}
 {% block content %}
-<h1>SCOREBOARD</h1>
-<h3>12 FLAGS TOTALES</h3>
-<div class="card mt-3">
+
+<div class="flex gap-2 mb-2" style="flex-direction:column; align-items:flex-start;">
+  <a href="/" class="btn btn-ghost" style="font-size:0.72rem; padding:0.3rem 0.8rem;">← /home</a>
+  <h1>SCOREBOARD</h1>
+  <h2>12 flags disponibles — 1200 puntos totales</h2>
+</div>
+
+<div class="card mt-2">
+  <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase; margin-bottom:0.8rem;">
+    root@vulnmachine:~$ cat flags.txt
+  </div>
   <table class="data-table">
     <thead>
       <tr>
         <th>#</th>
         <th>Flag</th>
         <th>Descripción</th>
-        <th>Puntos</th>
+        <th>Pts</th>
       </tr>
     </thead>
     <tbody>
     {% for flag, desc in flags.items() %}
       <tr>
-        <td style="color:var(--muted);">{{ loop.index }}</td>
-        <td style="font-family:var(--font-mono);color:var(--accent3);font-size:0.78rem;">{{ flag }}</td>
-        <td>{{ desc }}</td>
-        <td style="color:var(--warn);font-family:var(--font-mono);">100pts</td>
+        <td style="color:var(--muted); font-size:0.72rem;">{{ loop.index }}</td>
+        <td style="font-family:var(--font-mono); color:var(--green); font-size:0.75rem; text-shadow:var(--glow-dim);">{{ flag }}</td>
+        <td style="font-size:0.8rem;">{{ desc }}</td>
+        <td style="color:var(--warn); font-family:var(--font-mono); font-size:0.78rem;">100</td>
       </tr>
     {% endfor %}
     </tbody>
   </table>
 </div>
-<div class="card mt-2" style="text-align:center;padding:2rem;">
-  <div style="font-family:var(--font-head);font-size:3rem;color:var(--accent);">1200</div>
-  <div style="color:var(--muted);font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;">Puntos totales disponibles</div>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; margin-top:1.2rem;">
+  <div class="card" style="text-align:center; padding:1.5rem;">
+    <div style="font-family:var(--font-vt); font-size:3.5rem; color:var(--green); text-shadow:var(--glow); line-height:1;">1200</div>
+    <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase; margin-top:0.3rem;">Puntos totales</div>
+  </div>
+  <div class="card" style="text-align:center; padding:1.5rem;">
+    <div style="font-family:var(--font-vt); font-size:3.5rem; color:var(--green); text-shadow:var(--glow); line-height:1;">12</div>
+    <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase; margin-top:0.3rem;">Flags totales</div>
+  </div>
 </div>
+
 <div class="hint-box mt-2">
-  <div class="hint-title">🔧 Herramientas recomendadas (Kali Linux)</div>
+  <div class="hint-title">herramientas recomendadas (Kali Linux)</div>
   <p>
-    <code>sqlmap -u "http://192.168.56.101:5000/challenge/X/levelY?param=1" --dbs --dump</code><br>
-    <code>curl "http://192.168.56.101:5000/challenge/2/level1?id=0 UNION SELECT..."</code><br>
+    <code>sqlmap -u "http://192.168.56.101:5000/challenge/X/levelY?param=1" --dbs --dump --batch</code><br>
+    <code>curl "http://192.168.56.101:5000/challenge/2/level1?id=0%20UNION%20SELECT..."</code><br><br>
     Burp Suite → Proxy → Repeater para pruebas manuales<br>
     OWASP ZAP para escaneo automático
   </p>
 </div>
+
 {% endblock %}

@@ -3,9 +3,9 @@
 {% block content %}
 
 <div class="flex gap-2 mb-2" style="flex-direction:column; align-items:flex-start;">
-  <a href="/challenge/1" class="btn btn-ghost" style="font-size:0.75rem; padding:0.3rem 0.8rem;">← C1 Overview</a>
+  <a href="/challenge/1" class="btn btn-ghost" style="font-size:0.72rem; padding:0.3rem 0.8rem;">← C1 Overview</a>
   <div class="flex gap-2">
-    <h1 style="font-size:1.2rem;">C1</h1>
+    <h1 style="font-size:1.4rem;">C1</h1>
     <span class="badge badge-easy" style="align-self:center;">NIVEL 1 – SIN PROTECCIÓN</span>
   </div>
   <h2>Login Bypass – Clásico</h2>
@@ -42,18 +42,18 @@
 
       {% if flag %}
       <div class="flag-box mt-2">
-        <div class="flag-label">🚩 FLAG CAPTURADA</div>
+        <div class="flag-label">FLAG CAPTURADA</div>
         <div class="flag-value">{{ flag }}</div>
       </div>
       {% endif %}
 
       {% if result %}
-      <div class="alert alert-success mt-2">✅ Acceso concedido — Sesión iniciada como administrador</div>
+      <div class="alert alert-success mt-2">Acceso concedido — sesión iniciada como administrador</div>
       {% endif %}
     </div>
 
     <div class="hint-box mt-2">
-      <div class="hint-title">💡 Pista</div>
+      <div class="hint-title">pista</div>
       <p>
         La query es: <code>SELECT * FROM users WHERE username='X' AND password='Y'</code><br><br>
         Prueba en el campo usuario: <code>' OR '1'='1' --</code><br>
@@ -62,18 +62,19 @@
     </div>
   </div>
 
-  <div class="card" style="font-family:var(--font-mono); font-size:0.8rem;">
-    <div style="color:var(--muted); font-size:0.7rem; letter-spacing:2px; margin-bottom:1rem; text-transform:uppercase;">Código fuente (simulado)</div>
-    <pre style="background:#040c15; padding:1rem; border-radius:3px; overflow:auto; color:var(--text); line-height:1.7; border:1px solid var(--border);">
-<span style="color:#7fdbca;">query</span> = <span style="color:#f1c40f;">f"SELECT * FROM users</span>
-<span style="color:#f1c40f;">  WHERE username=<span style="color:var(--accent2)">'{user}'</span></span>
-<span style="color:#f1c40f;">  AND password=<span style="color:var(--accent2)">'{pwd}'"</span></span>
+  <div class="card" style="font-size:0.8rem;">
+    <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase; margin-bottom:0.8rem;">código fuente (simulado)</div>
+    <pre style="background:#000; padding:1rem; overflow:auto; color:var(--text); line-height:1.8; border:1px solid var(--border); font-family:var(--font-mono); font-size:0.78rem;">
+<span style="color:var(--muted)"># Sin ninguna sanitización</span>
+<span style="color:var(--green-dim)">query</span> = <span style="color:var(--green)">f"SELECT * FROM users</span>
+<span style="color:var(--green)">  WHERE username=</span><span style="color:var(--danger)">'{user}'</span>
+<span style="color:var(--green)">  AND password=</span><span style="color:var(--danger)">'{pwd}'"</span>
 
-<span style="color:var(--muted)"># ⚠️ Sin sanitización</span>
-<span style="color:#7fdbca;">cursor</span>.<span style="color:#e8b90f;">execute</span>(query)
+<span style="color:var(--muted)"># ⚠ Entrada directamente interpolada</span>
+<span style="color:var(--green-dim)">cursor</span>.execute(query)
     </pre>
-    <p style="color:var(--accent2); font-size:0.78rem; margin-top:0.8rem;">
-      ⚠️ La entrada del usuario se concatena directamente en la query SQL.
+    <p style="color:var(--danger); font-size:0.75rem; margin-top:0.8rem;">
+      ⚠ La entrada del usuario se concatena directamente en la query SQL.
     </p>
   </div>
 </div>
