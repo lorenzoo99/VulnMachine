@@ -37,12 +37,4 @@
   </table>
 </div>
 {% endif %}
-<div class="hint-box mt-2">
-  <div class="hint-title">💡 Pista</div>
-  <p>
-    La query termina en <code>LIMIT [limit]</code> sin sanitizar.<br>
-    Prueba: <code>?search=a&limit=5 UNION SELECT 1,secret_flag,description,price FROM products-- </code><br>
-    El LIMIT acepta cualquier texto válido de SQL después del número.
-  </p>
-</div>
 {% endblock %}

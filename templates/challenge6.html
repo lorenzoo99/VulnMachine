@@ -39,14 +39,5 @@
   </div>
 </div>
 
-<div class="hint-box mt-3">
-  <div class="hint-title">técnica: ORDER BY CASE WHEN</div>
-  <p>
-    No puedes usar UNION en ORDER BY, pero sí CASE WHEN:<br>
-    <code>?sort=CASE WHEN (SELECT COUNT(*) FROM users WHERE username='admin')>0 THEN id ELSE price END</code><br><br>
-    Para nivel 2 (column inject):<br>
-    <code>?col=(SELECT secret_flag FROM products WHERE id=12)</code>
-  </p>
-</div>
 
 {% endblock %}

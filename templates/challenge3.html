@@ -39,13 +39,5 @@
   </div>
 </div>
 
-<div class="hint-box mt-3">
-  <div class="hint-title">técnica: UNION con número correcto de columnas</div>
-  <p>
-    El SELECT original tiene 3 columnas: id, name, category.<br>
-    Payload: <code>?q=x' UNION SELECT 1,flag,name FROM secret_flags--</code><br>
-    Para nivel 2 con comillas escapadas, prueba inyecciones sin comillas o usa <code>CHAR()</code> para codificar strings.
-  </p>
-</div>
 
 {% endblock %}

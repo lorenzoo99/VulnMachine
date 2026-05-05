@@ -4,21 +4,29 @@
 
 <!-- Boot header -->
 <div style="margin-bottom: 2rem; padding-top: 0.5rem;">
-  <pre style="font-family:var(--font-mono); font-size:0.72rem; color:var(--green); text-shadow:var(--glow); line-height:1.25; margin-bottom:1.2rem; overflow-x:auto;">
- _   ___   _ _     _  ____  ___   _   ___ _  _ ___ _  _ ___
-| | / / | | | |   | \/ /  \/   \ | | |_ _| \| | __| \| | __|
-| V /| |_| | |__ | () | () | ()|/| |  | || .` | _|| .` | _|
-|_/\_\\___/|_____||_/\_\\___/\___' |_| |___|_|\_|___|_|\_|___|</pre>
+
+  <!-- Título legible con VT323 + decoración simple -->
+  <div style="margin-bottom:1.2rem;">
+    <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--border); letter-spacing:1px; margin-bottom:0.3rem;">
+      ╔══════════════════════════════════════════════════════════╗
+    </div>
+    <div style="font-family:var(--font-vt); font-size:4.5rem; color:var(--green); text-shadow:var(--glow); letter-spacing:8px; line-height:1; padding:0 1rem;">
+      VULNMACHINE
+    </div>
+    <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--border); letter-spacing:1px; margin-top:0.3rem;">
+      ╚══════════════════════════════════════════════════════════╝
+    </div>
+  </div>
 
   <div style="font-family:var(--font-mono); font-size:0.78rem; color:var(--green-dim); letter-spacing:2px; margin-bottom:1.4rem;">
-    SQL INJECTION TRAINING LAB &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; 6 challenges / 12 flags
+    SQL INJECTION TRAINING LAB &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; 7 challenges / 14 flags
   </div>
 
   <!-- Boot log -->
   <div style="border:1px solid var(--border); background:var(--card); padding:0.9rem 1.1rem; font-size:0.78rem; font-family:var(--font-mono); line-height:2;">
     <div><span style="color:var(--green-dim);">[  OK  ]</span> &nbsp;Iniciando VulnMachine...</div>
     <div><span style="color:var(--green-dim);">[  OK  ]</span> &nbsp;Base de datos vulnerable cargada &nbsp;<span style="color:var(--muted);">→ vulnerable.db</span></div>
-    <div><span style="color:var(--green-dim);">[  OK  ]</span> &nbsp;6 vectores de ataque disponibles</div>
+    <div><span style="color:var(--green-dim);">[  OK  ]</span> &nbsp;7 vectores de ataque disponibles</div>
     <div><span style="color:var(--green-dim);">[  OK  ]</span> &nbsp;Modo entrenamiento activado</div>
     <div><span style="color:var(--warn);">[ WARN ]</span> &nbsp;Entorno intencionalmente vulnerable &mdash; solo uso educativo</div>
     <div style="margin-top:0.4rem; color:var(--text);">
@@ -27,8 +35,8 @@
   </div>
 </div>
 
-<!-- Challenge cards -->
-<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin-bottom:1px; grid-auto-rows:1fr;">
+<!-- Challenge cards C1–C6 (grid 3x2) -->
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin-bottom:1px;">
 
   <!-- C1 -->
   <div style="background:var(--card); padding:1.2rem; display:flex; flex-direction:column; gap:0.6rem;">
@@ -41,9 +49,7 @@
       <span class="badge badge-easy">sin filtro</span>
       <span class="badge badge-medium">WAF bypass</span>
     </div>
-    <a href="/challenge/1" class="btn btn-primary" style="margin-top:auto; text-align:center; font-size:0.72rem;">
-      &gt;&nbsp;./run --id=1
-    </a>
+    <a href="/challenge/1" class="btn btn-primary" style="margin-top:auto; text-align:center; font-size:0.72rem;">&gt;&nbsp;./run --id=1</a>
   </div>
 
   <!-- C2 -->
@@ -57,9 +63,7 @@
       <span class="badge badge-easy">error exfil</span>
       <span class="badge badge-medium">UNION select</span>
     </div>
-    <a href="/challenge/2" class="btn btn-primary" style="margin-top:auto; text-align:center; font-size:0.72rem;">
-      &gt;&nbsp;./run --id=2
-    </a>
+    <a href="/challenge/2" class="btn btn-primary" style="margin-top:auto; text-align:center; font-size:0.72rem;">&gt;&nbsp;./run --id=2</a>
   </div>
 
   <!-- C3 -->
@@ -73,9 +77,7 @@
       <span class="badge badge-easy">3 columnas</span>
       <span class="badge badge-hard">encoding bypass</span>
     </div>
-    <a href="/challenge/3" class="btn btn-primary" style="margin-top:auto; text-align:center; font-size:0.72rem;">
-      &gt;&nbsp;./run --id=3
-    </a>
+    <a href="/challenge/3" class="btn btn-primary" style="margin-top:auto; text-align:center; font-size:0.72rem;">&gt;&nbsp;./run --id=3</a>
   </div>
 
   <!-- C4 -->
@@ -89,9 +91,7 @@
       <span class="badge badge-medium">boolean</span>
       <span class="badge badge-hard">time-based</span>
     </div>
-    <a href="/challenge/4" class="btn btn-primary" style="margin-top:auto; text-align:center; font-size:0.72rem;">
-      &gt;&nbsp;./run --id=4
-    </a>
+    <a href="/challenge/4" class="btn btn-primary" style="margin-top:auto; text-align:center; font-size:0.72rem;">&gt;&nbsp;./run --id=4</a>
   </div>
 
   <!-- C5 -->
@@ -105,9 +105,7 @@
       <span class="badge badge-easy">LIKE clause</span>
       <span class="badge badge-medium">LIMIT inject</span>
     </div>
-    <a href="/challenge/5" class="btn btn-primary" style="margin-top:auto; text-align:center; font-size:0.72rem;">
-      &gt;&nbsp;./run --id=5
-    </a>
+    <a href="/challenge/5" class="btn btn-primary" style="margin-top:auto; text-align:center; font-size:0.72rem;">&gt;&nbsp;./run --id=5</a>
   </div>
 
   <!-- C6 -->
@@ -121,13 +119,14 @@
       <span class="badge badge-medium">CASE/WHEN</span>
       <span class="badge badge-hard">subquery col</span>
     </div>
-    <a href="/challenge/6" class="btn btn-primary" style="margin-top:auto; text-align:center; font-size:0.72rem;">
-      &gt;&nbsp;./run --id=6
-    </a>
+    <a href="/challenge/6" class="btn btn-primary" style="margin-top:auto; text-align:center; font-size:0.72rem;">&gt;&nbsp;./run --id=6</a>
   </div>
 
-  <!-- C7 -->
-  <div style="background:var(--card); padding:1.2rem; display:flex; flex-direction:column; gap:0.6rem;">
+</div>
+
+<!-- C7 centrado en su propia fila -->
+<div style="border:1px solid var(--border); border-top:none; background:var(--border); display:flex; justify-content:center; margin-bottom:1px; padding:1px;">
+  <div style="background:var(--card); padding:1.2rem; display:flex; flex-direction:column; gap:0.6rem; width:33.33%;">
     <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase;">challenge_07.sh</div>
     <div style="font-family:var(--font-vt); font-size:1.8rem; color:var(--green); text-shadow:var(--glow-dim); letter-spacing:2px;">STORED XSS</div>
     <div style="font-size:0.75rem; color:var(--text); line-height:1.7;">
@@ -137,22 +136,19 @@
       <span class="badge badge-easy">BeEF hook</span>
       <span class="badge badge-medium">filter bypass</span>
     </div>
-    <a href="/challenge/7" class="btn btn-primary" style="margin-top:auto; text-align:center; font-size:0.72rem;">
-      &gt;&nbsp;./run --id=7
-    </a>
+    <a href="/challenge/7" class="btn btn-primary" style="margin-top:auto; text-align:center; font-size:0.72rem;">&gt;&nbsp;./run --id=7</a>
   </div>
-
 </div>
 
 <!-- Stats bar -->
 <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:0; background:var(--border); border:1px solid var(--border);">
   <div style="background:var(--surface); padding:0.9rem; text-align:center; border-right:1px solid var(--border);">
-    <div style="font-family:var(--font-vt); font-size:2.2rem; color:var(--green); text-shadow:var(--glow);">6</div>
+    <div style="font-family:var(--font-vt); font-size:2.2rem; color:var(--green); text-shadow:var(--glow);">7</div>
     <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase;">Desafíos</div>
   </div>
   <div style="background:var(--surface); padding:0.9rem; text-align:center; border-right:1px solid var(--border);">
-    <div style="font-family:var(--font-vt); font-size:2.2rem; color:var(--green); text-shadow:var(--glow);">12</div>
-    <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase;">Flags</div>
+    <div style="font-family:var(--font-vt); font-size:2.2rem; color:var(--green); text-shadow:var(--glow);">14</div>
+    <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase;">Banderas</div>
   </div>
   <div style="background:var(--surface); padding:0.9rem; text-align:center; border-right:1px solid var(--border);">
     <div style="font-family:var(--font-vt); font-size:2.2rem; color:var(--green); text-shadow:var(--glow);">2</div>

