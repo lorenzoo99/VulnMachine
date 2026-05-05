@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}C2 Nivel 1 – Error-Based{% endblock %}
+{% block content %}
+<div style="flex-direction:column;align-items:flex-start;" class="flex gap-2 mb-2">
+  <a href="/challenge/2" class="btn btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.8rem;">← C2 Overview</a>
+  <div class="flex gap-2"><h1 style="font-size:1.2rem;">C2</h1>
+  <span class="badge badge-easy" style="align-self:center;">NIVEL 1 – ERROR-BASED</span></div>
+  <h2>Catálogo de Productos</h2>
+</div>
+<div class="level-nav">
+  <a href="/challenge/2/level1?id=1" class="active">Nivel 1</a>
+  <a href="/challenge/2/level2?id=1">Nivel 2</a>
+</div>
+<div class="url-bar"><span class="method">GET</span>
+<span class="path">/challenge/2/level1?id={{ pid }}</span></div>
+<div class="card mb-2">
+  <h2>Buscar Producto por ID</h2>
+  <form method="GET" style="display:flex;gap:1rem;align-items:flex-end;">
+    <div class="form-group" style="flex:1;margin:0;">
+      <label>ID del Producto</label>
+      <input type="text" name="id" value="{{ pid }}" autocomplete="off">
+    </div>
+    <button type="submit" class="btn btn-primary">BUSCAR</button>
+  </form>
+</div>
+{% if error %}<div class="alert alert-error">🛑 {{ error }}</div>{% endif %}
+{% if flag %}<div class="flag-box"><div class="flag-label">🚩 FLAG CAPTURADA</div><div class="flag-value">{{ flag }}</div></div>{% endif %}
+{% if result %}
+<div class="card mt-2">
+  <h2>Resultados</h2>
+  <table class="data-table">
+    <thead><tr>{% for k in result[0].keys() %}<th>{{ k }}</th>{% endfor %}</tr></thead>
+    <tbody>{% for row in result %}<tr>{% for v in row.values() %}<td>{{ v }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+  </table>
+</div>
+{% endif %}
+<div class="hint-box mt-2">
+  <div class="hint-title">💡 Pista</div>
+  <p>
+    Prueba: <code>?id=1 ORDER BY 7--</code> para encontrar el número de columnas.<br>
+    Luego: <code>?id=0 UNION SELECT 1,secret_flag,3,4,5,6 FROM products--</code><br>
+    O enumera: <code>?id=0 UNION SELECT 1,flag,3 FROM secret_flags--</code>
+  </p>
+</div>
+{% endblock %}

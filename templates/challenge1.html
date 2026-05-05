@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}C1 – Login Bypass | VulnMachine{% endblock %}
+{% block content %}
+
+<div class="flex gap-2 mb-2" style="align-items:flex-start; flex-direction:column;">
+  <a href="/" class="btn btn-ghost" style="font-size:0.75rem; padding:0.3rem 0.8rem;">← Volver</a>
+  <h1>CHALLENGE 01</h1>
+  <h2>Login Bypass via SQL Injection</h2>
+</div>
+
+<div class="card mb-2">
+  <p style="line-height:1.8; color:var(--muted); font-family:var(--font-mono); font-size:0.85rem;">
+    El formulario de autenticación construye queries concatenando directamente la entrada del usuario.<br>
+    Tu objetivo: <span style="color:var(--accent)">bypassear el login y obtener la flag de administrador</span>.<br><br>
+    El <strong style="color:var(--accent3)">Nivel 1</strong> no tiene ninguna protección.<br>
+    El <strong style="color:var(--warn)">Nivel 2</strong> implementa un WAF básico que bloquea palabras clave en minúsculas.
+  </p>
+</div>
+
+<div class="grid-2">
+  <div class="card" style="border-color:rgba(57,255,20,0.4); text-align:center;">
+    <div style="font-family:var(--font-head); font-size:3rem; color:var(--accent3); margin-bottom:0.5rem;">1</div>
+    <div style="font-weight:700; font-size:1rem; margin-bottom:0.5rem;">Nivel Básico</div>
+    <span class="badge badge-easy">SIN PROTECCIÓN</span>
+    <p style="font-size:0.82rem; color:var(--muted); margin:1rem 0;">
+      Query directa sin ningún tipo de sanitización. Clásico bypass con <code style="color:var(--accent); background:rgba(0,212,255,0.1); padding:1px 4px;">' OR '1'='1</code>
+    </p>
+    <a href="/challenge/1/level1" class="btn btn-primary" style="background:var(--accent3); color:#000;">ACCEDER</a>
+  </div>
+
+  <div class="card" style="border-color:rgba(255,170,0,0.4); text-align:center;">
+    <div style="font-family:var(--font-head); font-size:3rem; color:var(--warn); margin-bottom:0.5rem;">2</div>
+    <div style="font-weight:700; font-size:1rem; margin-bottom:0.5rem;">Nivel Intermedio</div>
+    <span class="badge badge-medium">WAF BÁSICO</span>
+    <p style="font-size:0.82rem; color:var(--muted); margin:1rem 0;">
+      Filtro que bloquea <code style="color:var(--accent); background:rgba(0,212,255,0.1); padding:1px 4px;">or, union, select</code> en minúsculas. ¿Puedes bypassearlo?
+    </p>
+    <a href="/challenge/1/level2" class="btn btn-primary" style="background:var(--warn); color:#000;">ACCEDER</a>
+  </div>
+</div>
+
+<div class="hint-box mt-3">
+  <div class="hint-title">💡 Conceptos clave</div>
+  <p>
+    Un login vulnerable construye la query como:<br>
+    <code>SELECT * FROM users WHERE username='[INPUT]' AND password='[INPUT]'</code><br><br>
+    Si inyectas <code>' OR '1'='1' --</code> en el usuario, la condición siempre es verdadera y el login se bypasea.
+    Para el nivel 2, recuerda que los filtros de texto son case-sensitive: <code>OR</code> ≠ <code>or</code>.
+  </p>
+</div>
+
+{% endblock %}

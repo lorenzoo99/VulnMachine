@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}C4 – Blind Boolean SQLi | VulnMachine{% endblock %}
+{% block content %}
+<div style="flex-direction:column;align-items:flex-start;" class="flex gap-2 mb-2">
+  <a href="/" class="btn btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.8rem;">← Volver</a>
+  <h1>CHALLENGE 04</h1>
+  <h2>Blind Boolean SQL Injection</h2>
+</div>
+<div class="card mb-2">
+  <p style="line-height:1.8;color:var(--muted);font-family:var(--font-mono);font-size:0.85rem;">
+    No hay mensajes de error. Solo una respuesta binaria: el usuario existe o no existe.<br>
+    <strong style="color:var(--accent3)">Nivel 1</strong>: La respuesta indica claramente si el usuario existe.<br>
+    <strong style="color:var(--warn)">Nivel 2</strong>: Respuesta genérica — hay que inferir con condiciones booleanas.
+  </p>
+</div>
+<div class="grid-2">
+  <div class="card" style="border-color:rgba(57,255,20,0.4);text-align:center;">
+    <div style="font-family:var(--font-head);font-size:3rem;color:var(--accent3);margin-bottom:0.5rem;">1</div>
+    <span class="badge badge-medium">BOOLEAN RESPONSE</span>
+    <p style="font-size:0.82rem;color:var(--muted);margin:1rem 0;">La página dice claramente si el ID existe o no. Úsalo para extraer datos carácter a carácter.</p>
+    <a href="/challenge/4/level1?id=1" class="btn btn-primary" style="background:var(--accent3);color:#000;">ACCEDER</a>
+  </div>
+  <div class="card" style="border-color:rgba(255,170,0,0.4);text-align:center;">
+    <div style="font-family:var(--font-head);font-size:3rem;color:var(--warn);margin-bottom:0.5rem;">2</div>
+    <span class="badge badge-hard">TIME-BASED</span>
+    <p style="font-size:0.82rem;color:var(--muted);margin:1rem 0;">Respuesta siempre igual. Necesitas sqlmap o lógica de tiempo/inferencia para extraer datos.</p>
+    <a href="/challenge/4/level2?id=1" class="btn btn-primary" style="background:var(--warn);color:#000;">ACCEDER</a>
+  </div>
+</div>
+<div class="hint-box mt-3">
+  <div class="hint-title">💡 Técnica: Blind Boolean</div>
+  <p>
+    Payloads de ejemplo:<br>
+    <code>?id=1 AND 1=1--</code> → existe (TRUE)<br>
+    <code>?id=1 AND 1=2--</code> → no existe (FALSE)<br>
+    <code>?id=1 AND SUBSTR(username,1,1)='a'--</code> → extrae carácter a carácter<br><br>
+    Con sqlmap: <code>sqlmap -u "http://IP:5000/challenge/4/level1?id=1" --dbs</code>
+  </p>
+</div>
+{% endblock %}

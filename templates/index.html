@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% block title %}VulnMachine – SQL Injection Lab{% endblock %}
+{% block content %}
+
+<div style="text-align:center; padding: 3rem 0 2rem;">
+  <p class="text-mono" style="color:var(--accent2); font-size:0.75rem; letter-spacing:4px; margin-bottom:1rem;">
+    ██████████████████████████████████████████
+  </p>
+  <h1 style="font-size:2.8rem; letter-spacing:6px; margin-bottom:0.5rem;">VULNMACHINE</h1>
+  <h3 style="font-size:1rem; letter-spacing:4px;">SQL INJECTION TRAINING LAB v1.0</h3>
+  <p style="color:var(--muted); font-family:var(--font-mono); font-size:0.82rem; max-width:600px; margin:1rem auto; line-height:1.8;">
+    Plataforma de entrenamiento en seguridad ofensiva. 6 desafíos de SQL Injection, 
+    2 niveles de dificultad cada uno. 12 banderas en total. Encuentra todas las flags.
+  </p>
+  <p class="text-mono" style="color:var(--accent2); font-size:0.75rem; letter-spacing:4px; margin-top:1rem;">
+    ██████████████████████████████████████████
+  </p>
+</div>
+
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; margin-top:1rem;">
+
+  <!-- C1 -->
+  <div class="card" style="border-color:rgba(255,62,108,0.3);">
+    <div class="flex gap-1 mb-2">
+      <span style="font-family:var(--font-head); font-size:1.8rem; color:var(--accent2); line-height:1;">01</span>
+      <div>
+        <div style="font-weight:700; letter-spacing:1px;">Login Bypass</div>
+        <div style="font-size:0.75rem; color:var(--muted);">Autenticación vulnerable</div>
+      </div>
+    </div>
+    <p style="font-size:0.82rem; color:var(--muted); line-height:1.6; margin-bottom:1rem;">
+      Explota formularios de login con inyecciones clásicas. Bypassea la autenticación 
+      y accede como administrador.
+    </p>
+    <div class="flex gap-1 mb-2">
+      <span class="badge badge-easy">Nivel 1</span>
+      <span class="badge badge-medium">Nivel 2 – WAF</span>
+    </div>
+    <a href="/challenge/1" class="btn btn-danger" style="font-size:0.78rem; padding:0.5rem 1rem;">INICIAR →</a>
+  </div>
+
+  <!-- C2 -->
+  <div class="card" style="border-color:rgba(255,170,0,0.3);">
+    <div class="flex gap-1 mb-2">
+      <span style="font-family:var(--font-head); font-size:1.8rem; color:var(--warn); line-height:1;">02</span>
+      <div>
+        <div style="font-weight:700; letter-spacing:1px;">Error-Based</div>
+        <div style="font-size:0.75rem; color:var(--muted);">Exfiltración por errores</div>
+      </div>
+    </div>
+    <p style="font-size:0.82rem; color:var(--muted); line-height:1.6; margin-bottom:1rem;">
+      Usa los mensajes de error de la base de datos para extraer información sensible 
+      y banderas ocultas.
+    </p>
+    <div class="flex gap-1 mb-2">
+      <span class="badge badge-easy">Nivel 1</span>
+      <span class="badge badge-medium">Nivel 2 – UNION</span>
+    </div>
+    <a href="/challenge/2" class="btn btn-primary" style="font-size:0.78rem; padding:0.5rem 1rem; background:var(--warn); color:#000;">INICIAR →</a>
+  </div>
+
+  <!-- C3 -->
+  <div class="card" style="border-color:rgba(0,212,255,0.3);">
+    <div class="flex gap-1 mb-2">
+      <span style="font-family:var(--font-head); font-size:1.8rem; color:var(--accent); line-height:1;">03</span>
+      <div>
+        <div style="font-weight:700; letter-spacing:1px;">UNION-Based</div>
+        <div style="font-size:0.75rem; color:var(--muted);">Tablas adicionales</div>
+      </div>
+    </div>
+    <p style="font-size:0.82rem; color:var(--muted); line-height:1.6; margin-bottom:1rem;">
+      Combina consultas con UNION SELECT para extraer datos de otras tablas, 
+      incluyendo la tabla de flags secretas.
+    </p>
+    <div class="flex gap-1 mb-2">
+      <span class="badge badge-easy">Nivel 1</span>
+      <span class="badge badge-hard">Nivel 2 – Encoding</span>
+    </div>
+    <a href="/challenge/3" class="btn btn-primary" style="font-size:0.78rem; padding:0.5rem 1rem;">INICIAR →</a>
+  </div>
+
+  <!-- C4 -->
+  <div class="card" style="border-color:rgba(57,255,20,0.3);">
+    <div class="flex gap-1 mb-2">
+      <span style="font-family:var(--font-head); font-size:1.8rem; color:var(--accent3); line-height:1;">04</span>
+      <div>
+        <div style="font-weight:700; letter-spacing:1px;">Blind Boolean</div>
+        <div style="font-size:0.75rem; color:var(--muted);">Sin datos visibles</div>
+      </div>
+    </div>
+    <p style="font-size:0.82rem; color:var(--muted); line-height:1.6; margin-bottom:1rem;">
+      Sin mensajes de error. Infiere datos bit a bit usando respuestas booleanas 
+      y consultas condicionales.
+    </p>
+    <div class="flex gap-1 mb-2">
+      <span class="badge badge-medium">Nivel 1</span>
+      <span class="badge badge-hard">Nivel 2 – Time</span>
+    </div>
+    <a href="/challenge/4" class="btn btn-primary" style="font-size:0.78rem; padding:0.5rem 1rem; background:var(--accent3); color:#000;">INICIAR →</a>
+  </div>
+
+  <!-- C5 -->
+  <div class="card" style="border-color:rgba(150,100,255,0.3);">
+    <div class="flex gap-1 mb-2">
+      <span style="font-family:var(--font-head); font-size:1.8rem; color:#9664ff; line-height:1;">05</span>
+      <div>
+        <div style="font-weight:700; letter-spacing:1px;">Search SQLi</div>
+        <div style="font-size:0.75rem; color:var(--muted);">Buscador vulnerable</div>
+      </div>
+    </div>
+    <p style="font-size:0.82rem; color:var(--muted); line-height:1.6; margin-bottom:1rem;">
+      Inyección en campos de búsqueda con LIKE. El nivel 2 protege el campo 
+      principal pero olvida el parámetro LIMIT.
+    </p>
+    <div class="flex gap-1 mb-2">
+      <span class="badge badge-easy">Nivel 1</span>
+      <span class="badge badge-medium">Nivel 2 – LIMIT</span>
+    </div>
+    <a href="/challenge/5" class="btn btn-primary" style="font-size:0.78rem; padding:0.5rem 1rem; background:#9664ff;">INICIAR →</a>
+  </div>
+
+  <!-- C6 -->
+  <div class="card" style="border-color:rgba(255,62,108,0.2);">
+    <div class="flex gap-1 mb-2">
+      <span style="font-family:var(--font-head); font-size:1.8rem; color:var(--accent2); line-height:1;">06</span>
+      <div>
+        <div style="font-weight:700; letter-spacing:1px;">ORDER BY Inject</div>
+        <div style="font-size:0.75rem; color:var(--muted);">Panel de administración</div>
+      </div>
+    </div>
+    <p style="font-size:0.82rem; color:var(--muted); line-height:1.6; margin-bottom:1rem;">
+      Inyección en cláusula ORDER BY. El nivel 2 protege el sort pero el 
+      parámetro de columnas es vulnerable a subqueries.
+    </p>
+    <div class="flex gap-1 mb-2">
+      <span class="badge badge-medium">Nivel 1</span>
+      <span class="badge badge-hard">Nivel 2 – Subquery</span>
+    </div>
+    <a href="/challenge/6" class="btn btn-danger" style="font-size:0.78rem; padding:0.5rem 1rem;">INICIAR →</a>
+  </div>
+
+</div>
+
+<!-- Stats bar -->
+<div class="card mt-3" style="display:flex; justify-content:space-around; padding:1rem 2rem; border-color:var(--border);">
+  <div style="text-align:center;">
+    <div style="font-family:var(--font-head); font-size:2rem; color:var(--accent);">6</div>
+    <div style="font-size:0.75rem; color:var(--muted); letter-spacing:2px; text-transform:uppercase;">Desafíos</div>
+  </div>
+  <div style="text-align:center;">
+    <div style="font-family:var(--font-head); font-size:2rem; color:var(--accent2);">12</div>
+    <div style="font-size:0.75rem; color:var(--muted); letter-spacing:2px; text-transform:uppercase;">Banderas</div>
+  </div>
+  <div style="text-align:center;">
+    <div style="font-family:var(--font-head); font-size:2rem; color:var(--accent3);">2</div>
+    <div style="font-size:0.75rem; color:var(--muted); letter-spacing:2px; text-transform:uppercase;">Niveles</div>
+  </div>
+  <div style="text-align:center;">
+    <div style="font-family:var(--font-head); font-size:2rem; color:var(--warn);">SQLite</div>
+    <div style="font-size:0.75rem; color:var(--muted); letter-spacing:2px; text-transform:uppercase;">Base de datos</div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}C5 – Search SQLi | VulnMachine{% endblock %}
+{% block content %}
+<div style="flex-direction:column;align-items:flex-start;" class="flex gap-2 mb-2">
+  <a href="/" class="btn btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.8rem;">← Volver</a>
+  <h1>CHALLENGE 05</h1>
+  <h2>SQL Injection en Búsqueda (LIKE)</h2>
+</div>
+<div class="card mb-2">
+  <p style="line-height:1.8;color:var(--muted);font-family:var(--font-mono);font-size:0.85rem;">
+    El buscador de productos usa LIKE con la entrada del usuario sin sanitizar.<br>
+    <strong style="color:var(--accent3)">Nivel 1</strong>: El campo de búsqueda es directamente inyectable.<br>
+    <strong style="color:var(--warn)">Nivel 2</strong>: El search está sanitizado PERO el parámetro LIMIT no.
+  </p>
+</div>
+<div class="grid-2">
+  <div class="card" style="border-color:rgba(57,255,20,0.4);text-align:center;">
+    <div style="font-family:var(--font-head);font-size:3rem;color:var(--accent3);margin-bottom:0.5rem;">1</div>
+    <span class="badge badge-easy">LIKE CLAUSE</span>
+    <p style="font-size:0.82rem;color:var(--muted);margin:1rem 0;">Inyección directa en LIKE. Payload: <code>%' UNION SELECT...</code></p>
+    <a href="/challenge/5/level1" class="btn btn-primary" style="background:var(--accent3);color:#000;">ACCEDER</a>
+  </div>
+  <div class="card" style="border-color:rgba(255,170,0,0.4);text-align:center;">
+    <div style="font-family:var(--font-head);font-size:3rem;color:var(--warn);margin-bottom:0.5rem;">2</div>
+    <span class="badge badge-medium">LIMIT PARAM</span>
+    <p style="font-size:0.82rem;color:var(--muted);margin:1rem 0;">El search está protegido. El parámetro <code>?limit=</code> no lo está.</p>
+    <a href="/challenge/5/level2" class="btn btn-primary" style="background:var(--warn);color:#000;">ACCEDER</a>
+  </div>
+</div>
+<div class="hint-box mt-3">
+  <div class="hint-title">💡 Técnica: LIKE injection</div>
+  <p>
+    La query es: <code>SELECT ... FROM products WHERE name LIKE '%[search]%'</code><br>
+    Cierra el LIKE con: <code>%' UNION SELECT 1,secret_flag,3,4 FROM products-- </code><br>
+    Para nivel 2, el LIMIT permite: <code>?limit=5 UNION SELECT 1,flag,3 FROM secret_flags-- </code>
+  </p>
+</div>
+{% endblock %}

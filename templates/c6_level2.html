@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}C6 Nivel 2 – Column Subquery{% endblock %}
+{% block content %}
+<div style="flex-direction:column;align-items:flex-start;" class="flex gap-2 mb-2">
+  <a href="/challenge/6" class="btn btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.8rem;">← C6 Overview</a>
+  <div class="flex gap-2"><h1 style="font-size:1.2rem;">C6</h1>
+  <span class="badge badge-hard" style="align-self:center;">NIVEL 2 – COL SUBQUERY</span></div>
+  <h2>Panel Admin Mejorado™</h2>
+</div>
+<div class="level-nav">
+  <a href="/challenge/6/level1?sort=id">Nivel 1</a>
+  <a href="/challenge/6/level2?sort=id&col=name" class="active">Nivel 2</a>
+</div>
+<div class="alert alert-warn">🛡️ El parámetro <code>sort</code> usa whitelist. Pero hay otro parámetro...</div>
+<div class="url-bar"><span class="method">GET</span><span class="path">/challenge/6/level2?sort={{ sort }}&amp;col={{ col }}</span></div>
+<div class="card mb-2">
+  <h2>Ordenar y personalizar columna:</h2>
+  <form method="GET" style="display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap;">
+    <div class="form-group" style="flex:1;margin:0;">
+      <label>Ordenar por (sort)</label>
+      <input type="text" name="sort" value="{{ sort }}" autocomplete="off">
+    </div>
+    <div class="form-group" style="flex:1;margin:0;">
+      <label>Columna a mostrar (col)</label>
+      <input type="text" name="col" value="{{ col }}" autocomplete="off">
+    </div>
+    <button type="submit" class="btn btn-primary">APLICAR</button>
+  </form>
+</div>
+{% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+{% if flag %}<div class="flag-box"><div class="flag-label">🚩 FLAG CAPTURADA</div><div class="flag-value">{{ flag }}</div></div>{% endif %}
+{% if result %}
+<div class="card mt-2">
+  <table class="data-table">
+    <thead><tr>{% for k in result[0].keys() %}<th>{{ k }}</th>{% endfor %}</tr></thead>
+    <tbody>{% for row in result %}<tr>{% for v in row.values() %}<td>{{ v }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+  </table>
+</div>
+{% endif %}
+<div class="hint-box mt-2">
+  <div class="hint-title">💡 Pista</div>
+  <p>
+    Query: <code>SELECT id, [col], category, price FROM products ORDER BY [safe_sort]</code><br>
+    El parámetro <code>col</code> no está sanitizado. Prueba:<br>
+    <code>?col=(SELECT secret FROM users WHERE id=1)</code><br>
+    <code>?col=(SELECT secret_flag FROM products WHERE id=12)</code>
+  </p>
+</div>
+{% endblock %}

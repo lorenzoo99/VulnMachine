@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}C1 Nivel 2 – WAF Bypass{% endblock %}
+{% block content %}
+
+<div class="flex gap-2 mb-2" style="flex-direction:column; align-items:flex-start;">
+  <a href="/challenge/1" class="btn btn-ghost" style="font-size:0.75rem; padding:0.3rem 0.8rem;">← C1 Overview</a>
+  <div class="flex gap-2">
+    <h1 style="font-size:1.2rem;">C1</h1>
+    <span class="badge badge-medium" style="align-self:center;">NIVEL 2 – WAF BÁSICO</span>
+  </div>
+  <h2>Login Bypass – WAF Bypass</h2>
+</div>
+
+<div class="level-nav">
+  <a href="/challenge/1/level1">Nivel 1 – Básico</a>
+  <a href="/challenge/1/level2" class="active">Nivel 2 – WAF</a>
+</div>
+
+<div class="alert alert-warn">
+  ⚠️ WAF activo: Las palabras <strong>or, union, select, drop</strong> (en minúsculas) están bloqueadas.
+</div>
+
+<div class="grid-2" style="align-items:start;">
+  <div>
+    <div class="card">
+      <div class="url-bar">
+        <span class="method">POST</span>
+        <span class="path">/challenge/1/level2</span>
+      </div>
+      <h2>Panel de Acceso Protegido</h2>
+      <form method="POST">
+        <div class="form-group">
+          <label>Usuario</label>
+          <input type="text" name="username" placeholder="admin" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" name="password" placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;">INICIAR SESIÓN</button>
+      </form>
+
+      {% if error %}
+      <div class="alert alert-error mt-2">{{ error }}</div>
+      {% endif %}
+
+      {% if flag %}
+      <div class="flag-box mt-2">
+        <div class="flag-label">🚩 FLAG CAPTURADA</div>
+        <div class="flag-value">{{ flag }}</div>
+      </div>
+      {% endif %}
+
+      {% if result %}
+      <div class="alert alert-success mt-2">✅ WAF Bypasseado — Acceso concedido</div>
+      {% endif %}
+    </div>
+
+    <div class="hint-box mt-2">
+      <div class="hint-title">💡 Pista</div>
+      <p>
+        El WAF solo bloquea palabras en <strong style="color:var(--accent2)">minúsculas</strong>.<br><br>
+        ¿Qué pasa si usas <code>OR</code>, <code>Or</code> o <code>oR</code>?<br>
+        Prueba: <code>admin'-- -</code> o <code>' OR 1=1-- -</code><br>
+        También: <code>' oR '1'='1</code>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" style="font-family:var(--font-mono); font-size:0.8rem;">
+    <div style="color:var(--muted); font-size:0.7rem; letter-spacing:2px; margin-bottom:1rem; text-transform:uppercase;">WAF Implementation (simulado)</div>
+    <pre style="background:#040c15; padding:1rem; border-radius:3px; overflow:auto; color:var(--text); line-height:1.7; border:1px solid var(--border);">
+<span style="color:var(--muted)"># Palabras bloqueadas</span>
+blocked = [<span style="color:#f1c40f;">"or"</span>, <span style="color:#f1c40f;">"union"</span>,
+           <span style="color:#f1c40f;">"select"</span>, <span style="color:#f1c40f;">"drop"</span>]
+
+<span style="color:#7fdbca;">user_lower</span> = user.<span style="color:#e8b90f;">lower()</span>
+
+<span style="color:#c084fc;">if</span> <span style="color:#e8b90f;">any</span>(b <span style="color:#c084fc;">in</span> user_lower
+       <span style="color:#c084fc;">for</span> b <span style="color:#c084fc;">in</span> blocked):
+    <span style="color:var(--accent2)"># BLOQUEADO</span>
+<span style="color:#c084fc;">else</span>:
+    <span style="color:var(--muted)"># ⚠️ Aún vulnerable</span>
+    query = <span style="color:#f1c40f;">f"SELECT * FROM users
+  WHERE username=<span style="color:var(--accent2)">'{user}'</span>
+  AND password=<span style="color:var(--accent2)">'{pwd}'"</span></span>
+    </pre>
+    <p style="color:var(--warn); font-size:0.78rem; margin-top:0.8rem;">
+      🔍 El WAF compara contra <code>user.lower()</code>, pero ejecuta el <code>user</code> original.
+    </p>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}C5 Nivel 1 – LIKE SQLi{% endblock %}
+{% block content %}
+<div style="flex-direction:column;align-items:flex-start;" class="flex gap-2 mb-2">
+  <a href="/challenge/5" class="btn btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.8rem;">← C5 Overview</a>
+  <div class="flex gap-2"><h1 style="font-size:1.2rem;">C5</h1>
+  <span class="badge badge-easy" style="align-self:center;">NIVEL 1 – LIKE CLAUSE</span></div>
+  <h2>Buscador de Productos</h2>
+</div>
+<div class="level-nav">
+  <a href="/challenge/5/level1" class="active">Nivel 1</a>
+  <a href="/challenge/5/level2">Nivel 2</a>
+</div>
+<div class="url-bar"><span class="method">GET</span><span class="path">/challenge/5/level1?search={{ q }}</span></div>
+<div class="card mb-2">
+  <form method="GET" style="display:flex;gap:1rem;align-items:flex-end;">
+    <div class="form-group" style="flex:1;margin:0;">
+      <label>Buscar producto</label>
+      <input type="search" name="search" value="{{ q }}" placeholder="Laptop, Monitor, SSD..." autocomplete="off">
+    </div>
+    <button type="submit" class="btn btn-primary">🔍 BUSCAR</button>
+  </form>
+</div>
+{% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+{% if flag %}<div class="flag-box"><div class="flag-label">🚩 FLAG CAPTURADA</div><div class="flag-value">{{ flag }}</div></div>{% endif %}
+{% if result %}
+<div class="card mt-2">
+  <h2>Resultados ({{ result|length }})</h2>
+  <table class="data-table">
+    <thead><tr>{% for k in result[0].keys() %}<th>{{ k }}</th>{% endfor %}</tr></thead>
+    <tbody>{% for row in result %}<tr>{% for v in row.values() %}<td>{{ v }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+  </table>
+</div>
+{% endif %}
+<div class="hint-box mt-2">
+  <div class="hint-title">💡 Pista</div>
+  <p>
+    Query: <code>SELECT id,name,description,price FROM products WHERE name LIKE '%[search]%'</code><br>
+    Payload: <code>%' UNION SELECT 1,secret_flag,description,price FROM products-- </code><br>
+    O tablas: <code>%' UNION SELECT 1,name,sql,4 FROM sqlite_master-- </code>
+  </p>
+</div>
+{% endblock %}

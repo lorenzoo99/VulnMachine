@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}VulnMachine{% endblock %}</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #050a0f;
+  --surface:   #0a1520;
+  --card:      #0d1e2e;
+  --border:    #1a3a5c;
+  --accent:    #00d4ff;
+  --accent2:   #ff3e6c;
+  --accent3:   #39ff14;
+  --text:      #c8dde8;
+  --muted:     #4a7090;
+  --warn:      #ffaa00;
+  --font-mono: 'Share Tech Mono', monospace;
+  --font-ui:   'Rajdhani', sans-serif;
+  --font-head: 'Orbitron', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(0,212,255,0.07) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(255,62,108,0.05) 0%, transparent 50%),
+    linear-gradient(180deg, #050a0f 0%, #070e18 100%);
+}
+
+/* Grid overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Navbar ── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(5,10,15,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  height: 60px;
+}
+
+.nav-brand {
+  font-family: var(--font-head);
+  font-size: 1.1rem;
+  color: var(--accent);
+  text-decoration: none;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-brand::before {
+  content: '▲';
+  color: var(--accent2);
+  font-size: 0.8rem;
+}
+
+.nav-links { display: flex; gap: 1.5rem; flex: 1; }
+
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--accent); }
+
+.nav-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent3);
+  border: 1px solid var(--accent3);
+  padding: 2px 8px;
+  border-radius: 2px;
+  animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+  0%, 100% { box-shadow: 0 0 4px rgba(57,255,20,0.3); }
+  50%       { box-shadow: 0 0 12px rgba(57,255,20,0.6); }
+}
+
+/* ── Layout ── */
+main {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Cards ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1.5rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+}
+
+/* ── Headings ── */
+h1 {
+  font-family: var(--font-head);
+  font-size: 1.6rem;
+  color: var(--accent);
+  letter-spacing: 3px;
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  font-family: var(--font-ui);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--muted);
+  letter-spacing: 2px;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Forms ── */
+.form-group { margin-bottom: 1.2rem; }
+
+label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+
+input[type=text], input[type=password], input[type=search] {
+  width: 100%;
+  background: #071019;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  padding: 0.6rem 1rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(0,212,255,0.15);
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.8rem;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #000;
+}
+.btn-primary:hover {
+  background: #fff;
+  box-shadow: 0 0 20px rgba(0,212,255,0.5);
+}
+
+.btn-danger {
+  background: var(--accent2);
+  color: #fff;
+}
+.btn-danger:hover {
+  box-shadow: 0 0 20px rgba(255,62,108,0.5);
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── Alerts ── */
+.alert {
+  padding: 0.8rem 1.2rem;
+  border-radius: 2px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  border-left: 3px solid;
+}
+
+.alert-success {
+  background: rgba(57,255,20,0.08);
+  border-color: var(--accent3);
+  color: var(--accent3);
+}
+
+.alert-error {
+  background: rgba(255,62,108,0.08);
+  border-color: var(--accent2);
+  color: var(--accent2);
+}
+
+.alert-info {
+  background: rgba(0,212,255,0.08);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.alert-warn {
+  background: rgba(255,170,0,0.08);
+  border-color: var(--warn);
+  color: var(--warn);
+}
+
+/* ── Flag display ── */
+.flag-box {
+  background: rgba(57,255,20,0.05);
+  border: 1px solid var(--accent3);
+  border-radius: 4px;
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  text-align: center;
+  animation: flag-glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes flag-glow {
+  from { box-shadow: 0 0 10px rgba(57,255,20,0.2); }
+  to   { box-shadow: 0 0 30px rgba(57,255,20,0.5); }
+}
+
+.flag-box .flag-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 3px;
+  margin-bottom: 0.5rem;
+}
+
+.flag-box .flag-value {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  color: var(--accent3);
+  letter-spacing: 1px;
+  word-break: break-all;
+}
+
+/* ── Table ── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  margin-top: 1rem;
+}
+
+.data-table th {
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 0.5rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.data-table td {
+  padding: 0.5rem 0.8rem;
+  border-bottom: 1px solid rgba(26,58,92,0.4);
+  color: var(--text);
+}
+
+.data-table tr:hover td { background: rgba(0,212,255,0.03); }
+
+/* ── Badges ── */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 2px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.badge-easy   { background: rgba(57,255,20,0.15);  color: var(--accent3); border: 1px solid var(--accent3); }
+.badge-medium { background: rgba(255,170,0,0.15);  color: var(--warn);    border: 1px solid var(--warn); }
+.badge-hard   { background: rgba(255,62,108,0.15); color: var(--accent2); border: 1px solid var(--accent2); }
+
+/* ── Hint ── */
+.hint-box {
+  background: rgba(0,212,255,0.04);
+  border: 1px dashed var(--border);
+  border-radius: 4px;
+  padding: 1rem 1.2rem;
+  margin-top: 1rem;
+}
+
+.hint-title {
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.hint-box p {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.hint-box code {
+  background: rgba(0,212,255,0.1);
+  color: var(--accent);
+  padding: 0 4px;
+  border-radius: 2px;
+}
+
+/* ── Misc ── */
+.sep {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.5rem 0;
+}
+
+.text-mono { font-family: var(--font-mono); }
+.text-muted { color: var(--muted); }
+.text-accent { color: var(--accent); }
+.text-danger { color: var(--accent2); }
+.text-success { color: var(--accent3); }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+
+.flex { display: flex; align-items: center; }
+.gap-1 { gap: 0.5rem; }
+.gap-2 { gap: 1rem; }
+
+/* ── Footer ── */
+footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  padding: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+/* ── Scanline animation ── */
+@keyframes scanline {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+.scanline {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0,212,255,0.15), transparent);
+  animation: scanline 6s linear infinite;
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* ── Level nav ── */
+.level-nav {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.level-nav a {
+  flex: 1;
+  text-align: center;
+  padding: 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: all 0.2s;
+}
+
+.level-nav a:hover, .level-nav a.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(0,212,255,0.05);
+}
+
+/* ── URL display ── */
+.url-bar {
+  background: #040c15;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 0.4rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.url-bar .method {
+  color: var(--accent3);
+  font-weight: bold;
+}
+
+.url-bar .path { color: var(--accent); }
+</style>
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+<div class="scanline"></div>
+
+<nav>
+  <a href="/" class="nav-brand">VULNMACHINE</a>
+  <div class="nav-links">
+    <a href="/challenge/1">C1: Login</a>
+    <a href="/challenge/2">C2: Error</a>
+    <a href="/challenge/3">C3: Union</a>
+    <a href="/challenge/4">C4: Blind</a>
+    <a href="/challenge/5">C5: Search</a>
+    <a href="/challenge/6">C6: Order</a>
+    <a href="/scoreboard">Scoreboard</a>
+  </div>
+  <span class="nav-badge">LIVE</span>
+</nav>
+
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<footer>
+  VulnMachine v1.0 &nbsp;·&nbsp; Propósito educativo &nbsp;·&nbsp; SQL Injection Lab &nbsp;·&nbsp;
+  <span style="color:var(--accent2)">⚠ No usar en producción</span>
+</footer>
+</body>
+</html>

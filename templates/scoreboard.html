@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Scoreboard – VulnMachine{% endblock %}
+{% block content %}
+<h1>SCOREBOARD</h1>
+<h3>12 FLAGS TOTALES</h3>
+<div class="card mt-3">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Flag</th>
+        <th>Descripción</th>
+        <th>Puntos</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for flag, desc in flags.items() %}
+      <tr>
+        <td style="color:var(--muted);">{{ loop.index }}</td>
+        <td style="font-family:var(--font-mono);color:var(--accent3);font-size:0.78rem;">{{ flag }}</td>
+        <td>{{ desc }}</td>
+        <td style="color:var(--warn);font-family:var(--font-mono);">100pts</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="card mt-2" style="text-align:center;padding:2rem;">
+  <div style="font-family:var(--font-head);font-size:3rem;color:var(--accent);">1200</div>
+  <div style="color:var(--muted);font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;">Puntos totales disponibles</div>
+</div>
+<div class="hint-box mt-2">
+  <div class="hint-title">🔧 Herramientas recomendadas (Kali Linux)</div>
+  <p>
+    <code>sqlmap -u "http://192.168.56.101:5000/challenge/X/levelY?param=1" --dbs --dump</code><br>
+    <code>curl "http://192.168.56.101:5000/challenge/2/level1?id=0 UNION SELECT..."</code><br>
+    Burp Suite → Proxy → Repeater para pruebas manuales<br>
+    OWASP ZAP para escaneo automático
+  </p>
+</div>
+{% endblock %}
