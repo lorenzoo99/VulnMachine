@@ -199,15 +199,15 @@ def c3_level1():
 
 @app.route('/challenge/3/level2')
 def c3_level2():
-    search = request.args.get('q', '')
+    search = request.args.get('q', '1')
     result = error = flag = None
-    # Filtra comillas simples pero no comentarios --
+    # Sanitiza comillas simples — pero el parámetro se inyecta sin comillas en la query
     sanitized = search.replace("'", "''")
-    # Aún vulnerable a inyección sin comillas simples (numéricas) si q es int-like
     try:
         db = sqlite3.connect(DATABASE)
         cur = db.cursor()
-        query = f"SELECT id, name, category FROM products WHERE category='{sanitized}' ORDER BY id"
+        # Vulnerable: el valor va directo sin comillas, UNION funciona sin necesitar '
+        query = f"SELECT id, name, category FROM products WHERE id={sanitized} ORDER BY id"
         cur.execute(query)
         rows = cur.fetchall()
         cols = [d[0] for d in cur.description] if cur.description else []
