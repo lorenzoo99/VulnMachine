@@ -447,25 +447,50 @@ def c7_level2():
 
     return render_template('c7_level2.html', comments=comments, error=error, flag=flag)
 
-@app.route('/scoreboard')
+ALL_FLAGS = {
+    "FLAG{1A_4dm1n_bypass_sqli_b4sic}":         "C1 Nivel 1 – Login Bypass basico",
+    "FLAG{1B_w4f_bypass_case_OR_1=1}":           "C1 Nivel 2 – WAF Bypass (case)",
+    "FLAG{2A_err0r_based_data_exfil}":           "C2 Nivel 1 – Error-Based Exfil",
+    "FLAG{2B_un10n_s3lect_s3cret_t4ble}":        "C2 Nivel 2 – UNION Secret Table",
+    "FLAG{3A_un10n_s3lect_3cols_nailed}":        "C3 Nivel 1 – UNION 3 columnas",
+    "FLAG{3B_qu0te_escape_bypass_via_enc0ding}": "C3 Nivel 2 – Quote Escape Bypass",
+    "FLAG{4A_bl1nd_bool_sqli_tr00}":             "C4 Nivel 1 – Blind Boolean",
+    "FLAG{4B_bl1nd_b00l_t1me_b4sed}":            "C4 Nivel 2 – Blind Time-Based",
+    "FLAG{5A_lik3_cl4us3_sqli_pwned}":           "C5 Nivel 1 – LIKE Clause SQLi",
+    "FLAG{5B_l1m1t_param_sqli_bypass}":          "C5 Nivel 2 – LIMIT Param Bypass",
+    "FLAG{6A_0rder_by_sqli_c4se_when}":          "C6 Nivel 1 – ORDER BY CASE/WHEN",
+    "FLAG{6B_c0l_subquery_m4ster}":              "C6 Nivel 2 – Column Subquery Inject",
+    "FLAG{7A_st0red_xss_b33f_h00k}":             "C7 Nivel 1 – Stored XSS / BeEF Hook",
+    "FLAG{7B_xss_f1lt3r_byp4ss_b33f}":           "C7 Nivel 2 – XSS Filter Bypass BeEF",
+}
+
+@app.route('/scoreboard', methods=['GET', 'POST'])
 def scoreboard():
-    flags = {
-        "FLAG{1A_4dm1n_bypass_sqli_b4sic}":      "C1 Nivel 1 – Login Bypass básico",
-        "FLAG{1B_w4f_bypass_case_OR_1=1}":        "C1 Nivel 2 – WAF Bypass (case)",
-        "FLAG{2A_err0r_based_data_exfil}":        "C2 Nivel 1 – Error-Based Exfil",
-        "FLAG{2B_un10n_s3lect_s3cret_t4ble}":     "C2 Nivel 2 – UNION Secret Table",
-        "FLAG{3A_un10n_s3lect_3cols_nailed}":     "C3 Nivel 1 – UNION 3 columnas",
-        "FLAG{3B_qu0te_escape_bypass_via_enc0ding}": "C3 Nivel 2 – Quote Escape Bypass",
-        "FLAG{4A_bl1nd_bool_sqli_tr00}":          "C4 Nivel 1 – Blind Boolean",
-        "FLAG{4B_bl1nd_b00l_t1me_b4sed}":         "C4 Nivel 2 – Blind Time-Based",
-        "FLAG{5A_lik3_cl4us3_sqli_pwned}":        "C5 Nivel 1 – LIKE Clause SQLi",
-        "FLAG{5B_l1m1t_param_sqli_bypass}":       "C5 Nivel 2 – LIMIT Param Bypass",
-        "FLAG{6A_0rder_by_sqli_c4se_when}":       "C6 Nivel 1 – ORDER BY CASE/WHEN",
-        "FLAG{6B_c0l_subquery_m4ster}": "C6 Nivel 2 – Column Subquery Inject",
-        "FLAG{7A_st0red_xss_b33f_h00k}":   "C7 Nivel 1 – Stored XSS / BeEF Hook",
-        "FLAG{7B_xss_f1lt3r_byp4ss_b33f}": "C7 Nivel 2 – XSS Filter Bypass BeEF",
-    }
-    return render_template('scoreboard.html', flags=flags)
+    if 'captured' not in session:
+        session['captured'] = []
+
+    error = None
+    success = None
+
+    if request.method == 'POST':
+        if request.form.get('action') == 'reset':
+            session['captured'] = []
+            session.modified = True
+        else:
+            submitted = request.form.get('flag', '').strip()
+            if submitted in ALL_FLAGS:
+                if submitted in session['captured']:
+                    error = "Esa flag ya fue enviada anteriormente."
+                else:
+                    session['captured'] = session['captured'] + [submitted]
+                    session.modified = True
+                    success = f"[+] Flag valida: +100 puntos"
+            else:
+                error = "[-] Flag incorrecta o no existe."
+
+    captured = session['captured']
+    score = len(captured) * 100
+    return render_template('scoreboard.html', flags=ALL_FLAGS, captured=captured, score=score, error=error, success=success)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
