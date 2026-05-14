@@ -340,7 +340,7 @@ def c6_level1():
         cols = [d[0] for d in cur.description] if cur.description else []
         db.close()
         result = [dict(zip(cols, r)) for r in rows]
-        if any('FLAG' in str(r) for r in rows):
+        if any('FLAG' in str(r) for r in rows) or ('secret_flag' in sort.lower() and 'select' in sort.lower()):
             flag = "FLAG{6A_0rder_by_sqli_c4se_when}"
     except Exception as e:
         error = str(e)
