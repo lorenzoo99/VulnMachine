@@ -82,8 +82,7 @@ def c1_level2():
         pwd  = request.form.get('password', '')
         # WAF básico que bloquea solo la palabra "or" en minúsculas
         blocked = ["or", "union", "select", "drop"]
-        user_lower = user.lower()
-        if any(b in user_lower for b in blocked):
+        if any(b in user for b in blocked):
             error = "⚠️ WAF: Entrada bloqueada por política de seguridad."
         else:
             try:
