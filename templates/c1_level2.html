@@ -71,7 +71,7 @@ blocked = [<span style="color:var(--green)">"or"</span>, <span style="color:var(
        <span style="color:var(--green-dim)">for</span> b <span style="color:var(--green-dim)">in</span> blocked):
     <span style="color:var(--muted)"># BLOQUEADO</span>
 <span style="color:var(--green-dim)">else</span>:
-    <span style="color:var(--muted)"># ⚠ Aún vulnerable</span>
+    <span style="color:var(--muted)"># [!] Aún vulnerable</span>
     query = <span style="color:var(--green)">f"SELECT * FROM users
   WHERE username=<span style="color:var(--danger)">'{user}'</span>
   AND password=<span style="color:var(--danger)">'{pwd}'"</span></span>

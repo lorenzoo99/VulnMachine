@@ -11,7 +11,7 @@
   <a href="/challenge/6/level1?sort=id">Nivel 1</a>
   <a href="/challenge/6/level2?sort=id&col=name" class="active">Nivel 2</a>
 </div>
-<div class="alert alert-warn">🛡️ El parámetro <code>sort</code> usa whitelist. Pero hay otro parámetro...</div>
+<div class="alert alert-warn">[WAF] El parámetro <code>sort</code> usa whitelist. Pero hay otro parámetro...</div>
 <div class="url-bar"><span class="method">GET</span><span class="path">/challenge/6/level2?sort={{ sort }}&amp;col={{ col }}</span></div>
 <div class="card mb-2">
   <h2>Ordenar y personalizar columna:</h2>
@@ -28,7 +28,7 @@
   </form>
 </div>
 {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
-{% if flag %}<div class="flag-box"><div class="flag-label">🚩 FLAG CAPTURADA</div><div class="flag-value">{{ flag }}</div></div>{% endif %}
+{% if flag %}<div class="flag-box"><div class="flag-label">FLAG CAPTURADA</div><div class="flag-value">{{ flag }}</div></div>{% endif %}
 {% if result %}
 <div class="card mt-2">
   <table class="data-table">
