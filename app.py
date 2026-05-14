@@ -305,7 +305,7 @@ def c5_level2():
     try:
         db = sqlite3.connect(DATABASE)
         cur = db.cursor()
-        query = f"SELECT id, name, description, price FROM products WHERE name LIKE '%{safe_q}%' LIMIT {limit}"
+        query = f"SELECT id, name, description, price FROM products WHERE name LIKE '%{safe_q}%' AND id<={limit}"
         cur.execute(query)
         rows = cur.fetchall()
         cols = [d[0] for d in cur.description] if cur.description else []
