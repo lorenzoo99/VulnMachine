@@ -82,8 +82,7 @@ def c1_level2():
         pwd  = request.form.get('password', '')
         # WAF básico que bloquea solo la palabra "or" en minúsculas
         blocked = ["or", "union", "select", "drop"]
-        user_lower = user.lower()
-        if any(b in user_lower for b in blocked):
+        if any(b in user for b in blocked):
             error = "⚠️ WAF: Entrada bloqueada por política de seguridad."
         else:
             try:
@@ -199,15 +198,15 @@ def c3_level1():
 
 @app.route('/challenge/3/level2')
 def c3_level2():
-    search = request.args.get('q', '')
+    search = request.args.get('q', '1')
     result = error = flag = None
-    # Filtra comillas simples pero no comentarios --
+    # Sanitiza comillas simples — pero el parámetro se inyecta sin comillas en la query
     sanitized = search.replace("'", "''")
-    # Aún vulnerable a inyección sin comillas simples (numéricas) si q es int-like
     try:
         db = sqlite3.connect(DATABASE)
         cur = db.cursor()
-        query = f"SELECT id, name, category FROM products WHERE category='{sanitized}' ORDER BY id"
+        # Vulnerable: el valor va directo sin comillas, UNION funciona sin necesitar '
+        query = f"SELECT id, name, category FROM products WHERE id={sanitized} ORDER BY id"
         cur.execute(query)
         rows = cur.fetchall()
         cols = [d[0] for d in cur.description] if cur.description else []
@@ -241,10 +240,8 @@ def c4_level1():
         row = cur.fetchone()
         db.close()
         exists = row is not None
-        if exists and 'AND' in user_id.upper() and 'FLAG' in user_id.upper():
+        if exists:
             flag = "FLAG{4A_bl1nd_bool_sqli_tr00}"
-        elif exists:
-            pass
     except Exception as e:
         exists = False
     return render_template('c4_level1.html', exists=exists, flag=flag, uid=user_id)
@@ -307,7 +304,7 @@ def c5_level2():
     try:
         db = sqlite3.connect(DATABASE)
         cur = db.cursor()
-        query = f"SELECT id, name, description, price FROM products WHERE name LIKE '%{safe_q}%' LIMIT {limit}"
+        query = f"SELECT id, name, description, price FROM products WHERE name LIKE '%{safe_q}%' AND id<={limit}"
         cur.execute(query)
         rows = cur.fetchall()
         cols = [d[0] for d in cur.description] if cur.description else []
@@ -342,7 +339,7 @@ def c6_level1():
         cols = [d[0] for d in cur.description] if cur.description else []
         db.close()
         result = [dict(zip(cols, r)) for r in rows]
-        if any('FLAG' in str(r) for r in rows):
+        if any('FLAG' in str(r) for r in rows) or ('secret_flag' in sort.lower() and 'select' in sort.lower()):
             flag = "FLAG{6A_0rder_by_sqli_c4se_when}"
     except Exception as e:
         error = str(e)
