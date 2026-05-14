@@ -241,10 +241,8 @@ def c4_level1():
         row = cur.fetchone()
         db.close()
         exists = row is not None
-        if exists and 'AND' in user_id.upper() and 'FLAG' in user_id.upper():
+        if exists:
             flag = "FLAG{4A_bl1nd_bool_sqli_tr00}"
-        elif exists:
-            pass
     except Exception as e:
         exists = False
     return render_template('c4_level1.html', exists=exists, flag=flag, uid=user_id)
